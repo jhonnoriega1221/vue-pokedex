@@ -1,7 +1,14 @@
 <template>
     <div class="pokedex">
         <h1 class="pb-7">Pokedex</h1>
-        <Pokecard/>
+        <v-row>
+            <v-col 
+            class="pa-2" cols="6" sm="4" md="3" lg="3" xl="2" v-for="(pokemon, i) in 12"
+            v-bind:key="i">
+                <Pokecard/>
+            </v-col>
+        </v-row>
+        
     </div>
 </template>
 
