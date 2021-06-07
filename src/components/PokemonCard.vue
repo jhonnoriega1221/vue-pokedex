@@ -9,25 +9,17 @@
         dark
         to="pokemon/1"
         >
-            <!--Pokeball background-->
+            <!--Pokeball background
             <img class="pokeball-bg" src="../assets/pokeball.svg" alt="">
+            -->
 
             <!--Pokemon number-->
-            <v-row>
-                <v-col class="pb-0 pt-2" style="//background:brown" cols="12">
-                    <v-card-text style="height:20px" class="pa-0 text-h6 text-right font-weight-black text--disabled black--text">#001</v-card-text>
-                </v-col>
-            </v-row>
+            <v-card-text style="height:20px" class="pa-0 text-h6 text-right font-weight-black text--disabled black--text">#001</v-card-text>
+             
 
             <!--Pokemon name-->
-            <v-row>
-                <v-col class="py-0 pb-1 pl-1" style="//background:red" cols="12">
+            <v-card-title class="text-body pt-0 pl-0 font-weight-bold">Bulbasaur</v-card-title>
 
-                    <v-card-title class="text-body pa-0 pl-2 font-weight-bold  ">Bulbasaur</v-card-title>
-
-                </v-col>
-
-            </v-row>
 
             <v-row>
                 <!--Pokemon Types-->
