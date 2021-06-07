@@ -1,8 +1,8 @@
 <template>
-    <div class="pokemon-info">
+    <div class="pokemon-info" v-if="pokemonData">
         <v-row>
             <v-col class="pb-0" cols="12" lg="5">
-                <PokemonTopInfo />
+                <PokemonTopInfo v-bind:pokemonData="pokemonData"/>
             </v-col>
             <v-col class="pt-sm-only-0 " cols="12" lg="7">
                 <PokemonCardInfo/>
@@ -22,13 +22,24 @@ export default {
         PokemonTopInfo,
         PokemonCardInfo
     },
-    created(){
+    data: () => {
+        return{
+            pokemonData:''
+        }
+    },
+    mounted(){
         this.getPokemon(this.$route.params.id);
     },
     methods:{
         async getPokemon(id){
-            let pokemonData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-            console.log(pokemonData.data);
+            await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`).then(
+                res => {
+                    this.pokemonData = res.data
+                    console.log(this.pokemonData)
+                }
+            ).catch(err =>{
+                console.log(err);
+            })
         }
     }
 }

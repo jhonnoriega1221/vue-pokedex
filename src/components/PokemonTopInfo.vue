@@ -1,31 +1,27 @@
 <template>
     <div class="pokemon-top-info">
-
         <!--Pokeball background
         <img  class="pokeball-bg" src="../assets/pokeball.svg" alt="">
         
 -->
-
         <!--Pokemon name-->
-        <h1 class="white--text">Bulbasaur</h1>
+        <h1 class="text-capitalize white--text">{{pokemonData.name}}</h1>
 
         <!--Pokemon number-->
         <span 
         style="height:10px"
         class=" d-block text-h6 font-weight-black white--text text-right"
         >
-            #001
+            #{{pokemonData.id}}
         </span>
 
         <!--Pokemon types-->
-        <v-chip dark style="height:25px"  class="mr-2 text-center" color="rgba(255, 255, 255, 0.3)">Planta</v-chip>
-        <v-chip dark style="height:25px"  class="mr-2 text-center" color="rgba(255, 255, 255, 0.3)">Veneno</v-chip>
-        
+        <v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" dark style="height:25px"  class="mr-2 text-center text-capitalize" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip>
         <!--Pokemon artwork-->
         <v-img 
         contain
         height="200px"
-        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+        v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'
         ></v-img>
         
     </div>
@@ -33,7 +29,10 @@
 
 <script>
 export default {
-    name: 'PokemonTopInfo'
+    name: 'PokemonTopInfo',
+    props:{
+        pokemonData: Object
+    }
 }
 </script>
 
