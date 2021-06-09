@@ -35,7 +35,6 @@ export default {
             await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`).then(
                 res => {
                     this.pokemonData = res.data
-                    console.log(this.pokemonData)
                 }
             ).catch(err =>{
                 console.log(err);

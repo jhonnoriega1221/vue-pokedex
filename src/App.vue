@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-cloak>
       <!--Navigation-->
     <Navigation/>
 
@@ -48,4 +48,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+  [v-cloak] {
+    display: none;
+  }
+
 </style>
