@@ -17,12 +17,15 @@
 
         <!--Pokemon types-->
         <v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" dark style="height:25px"  class="mr-2 text-center text-capitalize" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip>
+        
         <!--Pokemon artwork-->
-        <v-img 
-        contain
-        height="200px"
-        v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'
-        ></v-img>
+        <v-responsive height="280px">
+            <v-img 
+            contain
+            height="280px"
+            v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'
+            ></v-img>
+        </v-responsive>
         
     </div>
 </template>

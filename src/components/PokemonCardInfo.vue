@@ -1,6 +1,6 @@
 <template>
     <div class="pokemon-card-info">
-        <v-card>
+        <v-card class="mt-0">
             <v-tabs show-arrows >
                 <v-tab>Acerca de</v-tab>
                 <v-tab>Estadisticas</v-tab>

@@ -11,8 +11,8 @@
                 v-bind:key="i">
 
                     <!--Pokemon card-->
-                    <div v-if="pokemonsURLList">
-                        <Pokecard v-bind:pokemonURL="pokemonsURLList[i]"/>
+                    <div v-if="pokemonSpeciesURLList">
+                        <Pokecard v-bind:pokemonSpecieURL="pokemonSpeciesURLList[i]"/>
                     </div>
 
                     <!--Pokemon card skeleton loader-->
@@ -53,31 +53,31 @@ import axios from 'axios';
         },
         data: () => {
             return {
-                pokemonsURLList: '',
-                apiLimit:12,
-                apiOffset:0,
-                paginationPage:0
+                pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API
+                apiLimit:12, //Limite de consulta de la API
+                apiOffset:0, //Offset de la consulta de la API
+                paginationPage:0 //Posición del paginador
             }
         },
         mounted(){
-            this.setPagination();
-            this.getPokemonsURLs(this.apiLimit, this.paginationPage)
+            this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
+            this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
         },
         watch: {
-            $route (to, from) {
+            $route (to, from) { //Actualiza la lista de pokemons al cambiar la ruta
                 this.setPagination();
-                this.pokemonsURLList=''
+                this.pokemonSpeciesURLList=''
                 window.scrollTo(0,0)
-                this.getPokemonsURLs(this.apiLimit, this.paginationPage)
+                this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
             }
         },
         methods: {
-            async getPokemonsURLs(limit, page){
-                this.apiOffset = limit * (page-1)
+            async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
+                this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada
 
-                await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${this.apiOffset}`).then(
+                await axios.get(`https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${this.apiOffset}`).then(
                     res => {
-                        this.pokemonsURLList = res.data.results
+                        this.pokemonSpeciesURLList = res.data.results
                     }
                 ).catch(
                     err => {
@@ -85,7 +85,7 @@ import axios from 'axios';
                     }
                 )
             },
-            setPagination(){
+            setPagination(){ //Determina que valor debe tener la query "page"
                 if(!this.$route.query.page){
                     this.$route.query.page = '1'
                     this.paginationPage = parseInt(this.$route.query.page)
@@ -93,7 +93,7 @@ import axios from 'axios';
                     this.paginationPage = parseInt(this.$route.query.page)
                 }
             },
-            nextPage(page) {
+            nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
                 this.$router.push({name:'Pokedex', query:{page:page}})
             }
         }

@@ -7,7 +7,7 @@
         flat
         ripple
         dark
-        :to="{ name: 'PokemonInfo', params: { id: pokemonData.id} }"
+        :to="{ name: 'PokemonInfo', params: { pokemon_name: pokemonSpecieData.name}}"
         >
         
             <!--Pokeball background
@@ -15,15 +15,15 @@
             -->
 
             <!--Pokemon number-->
-            <v-card-text style="height:20px" class="pa-0 text-h6 text-right font-weight-black text--disabled black--text">#{{pokemonData.id}}</v-card-text>
+            <v-card-text style="height:20px" class="pa-0 text-h6 text-right font-weight-black text--disabled black--text">#{{pokemonSpecieData.pokedex_numbers[0].entry_number}}</v-card-text>
 
             <!--Pokemon name-->
-            <v-card-title class="text-capitalize text-body pt-0 pl-0 font-weight-bold d-block text-truncate">{{pokemonData.name}}</v-card-title>
+            <v-card-title class="text-capitalize text-body pt-0 pl-0 font-weight-bold d-block text-truncate">{{pokemonSpecieData.name}}</v-card-title>
 
 
             <v-row>
                 <!--Pokemon Types-->
-                <v-col class="pb-0 pr-0 pt-0" style="//background:green" cols="6">
+                <v-col class="pb-0 pr-0 pt-0" cols="6">
                     
                     <v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" style="height:25px" class="text-capitalize mb-1 d-block text-center text-caption" color="rgba(255, 255, 255, 0.2)">
                         {{type.type.name}}
@@ -32,23 +32,22 @@
                 </v-col>
 
                 <!--Pokemon artwork-->
-                <v-col class="pa-0" style="//background:blue" cols="6">
-                    <div>
-                        <v-responsive :aspect-ratio="1/1">
-                            <v-img v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'>
-                                <template v-slot:placeholder>
-                                    <v-skeleton-loader>
-                                    </v-skeleton-loader>
-                                </template>
-                            </v-img>
-                        </v-responsive>
-                    </div>
+                <v-col class="pa-0" cols="6">
+                    <v-responsive :aspect-ratio="1/1">
+                        <v-img v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'>
+                            <template v-slot:placeholder>
+                                <v-skeleton-loader>
+                                </v-skeleton-loader>
+                            </template>
+                        </v-img>
+                    </v-responsive>
                 </v-col>
                 
             </v-row>
         </v-card>
 
     </div>
+    <!--Component PokemonCard skeleton loader-->
     <div v-else>
         <v-skeleton-loader
             transition="fade-transition" 
@@ -67,27 +66,37 @@ import axios from 'axios';
 export default {
     name: 'Pokecard',
     props:{
-        pokemonURL: Object
+        pokemonSpecieURL: Object
     },
     data: () => {
         return{
-            pokemonData: ''
+            pokemonSpecieData: '',
+            pokemonData:''
         }
     },
     mounted(){
         this.getPokemonData();
     },
     methods: {
-        getPokemonData(){
-            axios.get(this.pokemonURL.url).then(
+        async getPokemonData(){
+            await axios.get(this.pokemonSpecieURL.url).then(
                 res => {
-                    this.pokemonData = res.data;
+                    this.pokemonSpecieData = res.data;
+                    axios.get(res.data.varieties[0].pokemon.url).then(
+                        res => {
+                            this.pokemonData = res.data;
+                        }
+                    ).catch(
+                        err => {
+                            console.log(err);
+                        }
+                    );
                 }
             ).catch(
                 err =>{
                     console.log(err);
                 }
-            )
+            );
         }
     }
 }

@@ -22,22 +22,9 @@ import AppBar from '@/components/AppBar.vue'
 import Navigation from '@/components/Navigation.vue'
 
 export default {
-    components: {
-        AppBar,
-        Navigation
-    },
-  data: () => ({
-    logged: false, //PROVISIONAL
-    searchMode: false
-  }),
-  methods:{
-    changeLogged(){
-      this.logged = !this.logged;
-    },
-    switchSearchMode(){
-      this.searchMode = !this.searchMode;
-      
-    }
+  components: {
+      AppBar,
+      Navigation
   },
   computed:{
     styleBackground(){
@@ -49,8 +36,5 @@ export default {
 
 <style lang="scss" scoped>
 
-  [v-cloak] {
-    display: none;
-  }
 
 </style>
