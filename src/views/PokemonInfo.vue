@@ -1,10 +1,9 @@
 <template>
     <div class="pokemon-info" >
         <v-row>
-            
             <v-col class="pb-0" cols="12" lg="5">
-                <div v-if="true">
-                    <PokemonTopInfo/>
+                <div v-if="pokemonVarietiesData.length">
+                    <PokemonTopInfo v-bind:pokemonSpecie="pokemonSpecieData" v-bind:pokemonVarieties="pokemonVarietiesData"/>
                 </div>
                 <div v-else>
                     <v-skeleton-loader  type="text" class="mt-3" width="130"></v-skeleton-loader>
@@ -15,8 +14,8 @@
             </v-col>
             
             <v-col class="pt-1 " cols="12" lg="7">
-                <div v-if="true">
-                    <PokemonCardInfo/>
+                <div v-if="pokemonVarietiesData.length">
+                    <PokemonCardInfo v-bind:pokemonSpecie="pokemonSpecieData" v-bind:pokemonVarieties="pokemonVarietiesData"/>
                 </div>
                     <div v-else>
                     <v-skeleton-loader type ="image@2" style="background:white">
@@ -45,20 +44,31 @@ export default {
     },
     data: () => {
         return{
-            pokemonSpecieData: ''
+            pokemonSpecieData: '',
+            pokemonVarietiesData:[]
         }
     },
     mounted(){
-        //this.getPokemonSpecieData(this.$route.params.pokemon_name);
-
+        window.scrollTo(0,0);
+        this.getPokemonSpecieData(this.$route.params.pokemon_name);
     },
     methods:{
         async getPokemonSpecieData(name){
             await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`).then(
                 res => {
                     this.pokemonSpecieData = res.data
-                    return res.data
                     
+                    //Funcion que obtiene la info de cada pokemon
+                    const getPokemonsVarietiesData = async () => {
+                        for (const pokemonDataURL of this.pokemonSpecieData.varieties){
+                            await axios.get(pokemonDataURL.pokemon.url).then(
+                                res => {
+                                    this.pokemonVarietiesData.push(res.data)
+                                }
+                            ).catch(err => {console.log(err)})
+                        }
+                    }
+                    getPokemonsVarietiesData();                    
                 }
             ).catch(err =>{
                 console.log(err);
