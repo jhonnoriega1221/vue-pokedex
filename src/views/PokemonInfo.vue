@@ -3,8 +3,8 @@
         <v-row>
             
             <v-col class="pb-0" cols="12" lg="5">
-                <div v-if="pokemonData">
-                    <PokemonTopInfo v-bind:pokemonData="pokemonData"/>
+                <div v-if="true">
+                    <PokemonTopInfo/>
                 </div>
                 <div v-else>
                     <v-skeleton-loader  type="text" class="mt-3" width="130"></v-skeleton-loader>
@@ -14,8 +14,8 @@
                 </div>
             </v-col>
             
-            <v-col class="pt-sm-only-0 " cols="12" lg="7">
-                <div v-if="pokemonData">
+            <v-col class="pt-1 " cols="12" lg="7">
+                <div v-if="true">
                     <PokemonCardInfo/>
                 </div>
                     <div v-else>
@@ -40,22 +40,25 @@ import axios from "axios";
 export default {
     components:{
         PokemonTopInfo,
-        PokemonCardInfo
+        PokemonCardInfo,
+        index:0
     },
     data: () => {
         return{
-            pokemonData: '',
             pokemonSpecieData: ''
         }
     },
     mounted(){
-        this.getPokemonData(this.$route.params.pokemon_name);
+        //this.getPokemonSpecieData(this.$route.params.pokemon_name);
+
     },
     methods:{
-        async getPokemonData(name){
-            await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`).then(
+        async getPokemonSpecieData(name){
+            await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`).then(
                 res => {
-                    this.pokemonData = res.data
+                    this.pokemonSpecieData = res.data
+                    return res.data
+                    
                 }
             ).catch(err =>{
                 console.log(err);

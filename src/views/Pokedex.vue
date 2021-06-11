@@ -64,7 +64,7 @@ import axios from 'axios';
             this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
         },
         watch: {
-            $route (to, from) { //Actualiza la lista de pokemons al cambiar la ruta
+            $route () { //Actualiza la lista de pokemons al cambiar la ruta
                 this.setPagination();
                 this.pokemonSpeciesURLList=''
                 window.scrollTo(0,0)
