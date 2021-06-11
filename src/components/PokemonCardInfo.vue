@@ -2,9 +2,9 @@
     <div class="pokemon-card-info">
         <v-card class="mt-0">
             <v-tabs show-arrows >
-                <v-tab>Acerca de</v-tab>
+                <v-tab>Acerca</v-tab>
                 <v-tab>Estadisticas</v-tab>
-                <v-tab>Evoluciones</v-tab>
+                <v-tab>Evolución</v-tab>
                 <v-tab>Otros</v-tab>
 
                 <!--Acerca de-->
@@ -88,11 +88,115 @@
                 <v-tab-item>
                     <v-card flat>
                         <v-card-text>
+                            <!--Info-->
+                            <v-row>
+                                <v-col cols=3 class=pb-0>
+                                    PS
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                        
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
 
+                            <!--Info-->
+                            <v-row>
+                                <v-col cols=3 class=pb-0>
+                                    Ataque
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                        
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
+
+                            <!--Info-->
+                            <v-row>
+                                <v-col cols=3 class="pb-0 pr-0">
+                                    Defensa
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
+
+                            <!--Info-->
+                            <v-row>
+                                <v-col cols=3 class="pb-0 pr-0">
+                                    Atq. Es
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
+
+                            <!--Info-->
+                            <v-row>
+                                <v-col cols=3 class="pb-0 pr-0">
+                                    Dfns. Es
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
+
+                            <!--Info-->
+                            <v-row class="mb-4">
+                                <v-col cols=3 class="pb-0 pr-0">
+                                    Agilidad
+                                </v-col>
+                                <v-col cols=2 class="black--text pb-0">
+                                    60
+                                </v-col>
+                                <v-col cols=7 class="pt-5 pb-0">
+                                    <v-progress-linear 
+                                    value="25"
+                                    >
+                                    </v-progress-linear>
+                                </v-col>
+                            </v-row>
+
+                            <!--Defensas de tipos-->
+                            <h3 class="black--text pb-2">Defensas de tipos</h3>
+                            <p>La efectividad de cada tipo en bulbasaur.</p>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item></v-tab-item>
+
+                <!--Cadena evolutiva-->
+                <v-tab-item>
+                    
+                </v-tab-item>
                 <v-tab-item></v-tab-item>
             </v-tabs>
         </v-card>
