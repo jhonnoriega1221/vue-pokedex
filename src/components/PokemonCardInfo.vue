@@ -1,5 +1,5 @@
 <template>
-    <div class="pokemon-card-info">
+    <div class="pokemon-card-info" v-if="evolutionChain">
         <v-card class="mt-0">
             <v-tabs show-arrows >
                 <v-tab>Acerca</v-tab>
@@ -76,6 +76,7 @@
                 <v-tab-item>
                     <v-card flat>
                         <v-card-text>
+                            <h3 class="black--text pb-7">Estadisticas Base</h3>
                             <!--Info-->
                             <v-row>
                                 <v-col cols=3 class=pb-0>
@@ -173,7 +174,80 @@
 
                 <!--Cadena evolutiva-->
                 <v-tab-item>
-                    
+                    <v-card flat>
+                        <v-card-text>
+                            <h3 class="black--text pb-7">Cadena evolutiva</h3>
+
+                            <!--Fila de la primera evolución (Primer evolve to)-->
+                            <v-row>
+
+                                <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
+                                <v-col class="my-auto" cols=4>
+                                    <div>
+                                        <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"></v-img>
+                                        <p class="d-block text-center">{{evolutionChain.chain.species.name}}</p>
+                                    </div>
+                                </v-col>
+
+                                <!--Columna donde van las condiciones de evolución y los pokemones a los que evoluciona (No aplicar v-for)-->
+                                <v-col class="my-auto" cols=8>
+                                    <!--Fila donde van las condiciones de evolución y hacia que evoluciona (Aplicar v-for)-->
+                                    <v-row v-for="evolveTo in evolutionChain.chain.evolves_to" v-bind:key=evolveTo.id>
+
+                                        <!--Columna de las condiciones de evolución-->
+                                        <v-col class="my-auto" cols=6>
+                                            <p v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
+                                                Nivel {{evolutionConditions.min_level}}
+                                            </p>
+                                        </v-col>
+
+                                        <!--Columna donde se muestra hacia que va a evolucionar-->
+                                        <v-col class="my-auto" cols=6>
+                                            <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png"></v-img>
+                                            <p class="d-block text-center">{{evolveTo.species.name}}</p>
+                                        </v-col>
+
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                            <v-divider></v-divider>
+
+                            <!--Fila de la segunda evolución-->
+                            <v-row v-for="secondEvolution in evolutionChain.chain.evolves_to" v-bind:key=secondEvolution.id>
+
+                                <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
+                                <v-col class="my-auto" cols=4>
+                                    <div>
+                                        <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png"></v-img>
+                                        <p class="d-block text-center">{{secondEvolution.species.name}}</p>
+                                    </div>
+                                </v-col>
+
+                                <!--Columna donde van las condiciones de evolución y los pokemones a los que evoluciona (No aplicar v-for)-->
+                                <v-col class="my-auto" cols=8>
+                                    <!--Fila donde van las condiciones de evaluación y hacia que evoluciona (Aplicar v-for)-->
+                                    <v-row v-for="evolveTo in secondEvolution.evolves_to" v-bind:key=evolveTo.id>
+
+                                        <!--Columna de las condiciones de evolución-->
+                                        <v-col class="my-auto" cols=6>
+                                            <p v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
+                                                Nivel {{evolutionConditions.min_level}}
+                                            </p>
+                                        </v-col>
+
+                                        <!--Columna donde se muestra hacia que va a evolucionar-->
+                                        <v-col class="my-auto" cols=6>
+                                            <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"></v-img>
+                                            <p class="d-block text-center">{{evolveTo.species.name}}</p>
+                                        </v-col>
+                                    </v-row>
+
+
+                                </v-col>
+                            </v-row>
+                            
+                        </v-card-text>
+                    </v-card>
                 </v-tab-item>
                 <v-tab-item></v-tab-item>
             </v-tabs>
@@ -182,6 +256,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: 'PokemonCardInfo',
     props: {
@@ -191,11 +267,15 @@ export default {
     },
     data: () => {
         return {
-            pokedexDescription:''
+            pokedexDescription:'',
+            evolutionChain:''
+
+            //Cadena evolutiva
         }
     },
     mounted(){
         this.getDescription(this.pokemonSpecie.flavor_text_entries)
+        this.getEvolutionChain();
     },
     methods: {
         getDescription(pokemonEntries){
@@ -206,16 +286,34 @@ export default {
                 } else if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'lets-go-pikachu') {
                     this.pokedexDescription = pokemonEntries[i].flavor_text;
                     break;
+                } else if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'ultra-sun') {
+                    this.pokedexDescription = pokemonEntries[i].flavor_text;
+                    break;
+                } else if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'x') {
+                    this.pokedexDescription = pokemonEntries[i].flavor_text;
+                    break;
                 }
             }
+        },
+        async getEvolutionChain(){
+            await axios.get(this.pokemonSpecie.evolution_chain.url).then(
+                res => {
+                    console.log(res.data);
+                    this.evolutionChain = res.data;
+                }
+            ).catch( err => {console.log(err)} )
         }
     }
 }
 </script>
 
 <style lang="scss">
-
-    
+/* Flecha que va al fondo, sin implementar
+    .evolution_conditions{ 
+        background-size: 24px 24px;
+        background-image: url(../assets/arrow.svg);
+        background-position: center; 
+    }*/
 
     .card-info-title{
         color: grey;
