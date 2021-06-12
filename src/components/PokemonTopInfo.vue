@@ -1,6 +1,5 @@
 <template>
     <div class="pokemon-top-info" v-if="pokemonSpecie && pokemonVarieties.length">
-
         <!--Pokeball background
         <img  class="pokeball-bg" src="../assets/pokeball.svg" alt=""-->
 
@@ -45,6 +44,7 @@
                 mandatory
                 color="primary"
                 v-model="selectedForm"
+                @change="$emit('change',selectedForm)"
                 >
                     <v-btn
                     icon
@@ -73,13 +73,14 @@
 <script>
 export default {
     name: 'PokemonTopInfo',
-    props:{
+    props: {
         pokemonSpecie: Object,
-        pokemonVarieties: Array
+        pokemonVarieties: Array,
     },
-    data: () =>{
+    data: () => {
         return{
             selectedForm:0
+
         }
     }
 }

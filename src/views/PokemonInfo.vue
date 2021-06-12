@@ -3,7 +3,10 @@
         <v-row>
             <v-col class="pb-0" cols="12" lg="5">
                 <div v-if="pokemonVarietiesData.length">
-                    <PokemonTopInfo v-bind:pokemonSpecie="pokemonSpecieData" v-bind:pokemonVarieties="pokemonVarietiesData"/>
+                    <PokemonTopInfo
+                    @change="changeSelectedForm"
+                    v-bind:pokemonSpecie="pokemonSpecieData" 
+                    v-bind:pokemonVarieties="pokemonVarietiesData"/>
                 </div>
                 <div v-else>
                     <v-skeleton-loader  type="text" class="mt-3" width="130"></v-skeleton-loader>
@@ -15,7 +18,10 @@
             
             <v-col class="pt-1 " cols="12" lg="7">
                 <div v-if="pokemonVarietiesData.length">
-                    <PokemonCardInfo v-bind:pokemonSpecie="pokemonSpecieData" v-bind:pokemonVarieties="pokemonVarietiesData"/>
+                    <PokemonCardInfo 
+                    v-bind:pokemonSpecie="pokemonSpecieData" 
+                    v-bind:pokemonVarieties="pokemonVarietiesData"
+                    v-bind:selectedForm="selectedFormData"/>
                 </div>
                     <div v-else>
                     <v-skeleton-loader type ="image@2" style="background:white">
@@ -39,13 +45,13 @@ import axios from "axios";
 export default {
     components:{
         PokemonTopInfo,
-        PokemonCardInfo,
-        index:0
+        PokemonCardInfo
     },
     data: () => {
         return{
             pokemonSpecieData: '',
-            pokemonVarietiesData:[]
+            pokemonVarietiesData:[],
+            selectedFormData:0
         }
     },
     mounted(){
@@ -57,7 +63,6 @@ export default {
             await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`).then(
                 res => {
                     this.pokemonSpecieData = res.data
-                    
                     //Funcion que obtiene la info de cada pokemon
                     const getPokemonsVarietiesData = async () => {
                         for (const pokemonDataURL of this.pokemonSpecieData.varieties){
@@ -73,6 +78,10 @@ export default {
             ).catch(err =>{
                 console.log(err);
             })
+        },
+
+        changeSelectedForm (selectedForm) {
+            this.selectedFormData = selectedForm;
         }
     }
 }

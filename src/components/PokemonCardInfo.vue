@@ -12,10 +12,7 @@
                     <v-card flat>
                         <v-card-text>
                             <p class="black--text">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat.
+                                {{pokedexDescription}}
                             </p>
                             <v-row>
 
@@ -28,8 +25,8 @@
                                             <v-col cols=6>Peso</v-col>
                                         </v-row>
                                         <v-row class="mt-0">
-                                            <v-col cols=6>0.7 cm</v-col>
-                                            <v-col cols=6>6.9 kg</v-col>
+                                            <v-col cols=6>{{this.pokemonVarieties[selectedForm].height / 10}} m</v-col>
+                                            <v-col cols=6>{{this.pokemonVarieties[selectedForm].weight / 10}} kg</v-col>
                                         </v-row>
                                     </v-card>
 
@@ -45,34 +42,25 @@
                                             <p>Genero</p>
                                         </v-col>
                                         <v-col class="black--text py-0" cols=3>
-                                            <p class="pink--text d-inline font-weight-bold">F </p>
-                                            <p class="d-inline">12%</p>
+                                            <p class="pink--text d-inline font-weight-bold">F</p>
+                                            <p class="d-inline" v-if="this.pokemonSpecie.gender_rate > -1"> {{(this.pokemonSpecie.gender_rate / 8) * 100}}%</p>
+                                            <p class="d-inline" v-else> 0%</p>
                                         </v-col>
                                         <v-col class="black--text py-0" cols=4>
-                                            <p class="blue--text d-inline font-weight-bold">M </p>
-                                            <p class="d-inline">12%</p>
+                                            <p class="blue--text d-inline font-weight-bold">M</p>
+                                            <p class="d-inline" v-if="this.pokemonSpecie.gender_rate > -1"> {{100-((this.pokemonSpecie.gender_rate / 8) * 100)}}%</p>
+                                            <p class="d-inline" v-else> 0%</p>
                                         </v-col>
 
                                     </v-row>
 
-                                    <v-row>
+                                    <v-row v-if="this.pokemonSpecie.egg_groups.length">
 
                                         <v-col class="grey--text py-0" cols=5>
-                                            <p>Grupo Huevo</p>
+                                            <p>Grupos Huevo</p>
                                         </v-col>
                                         <v-col class="black--text py-0" cols=7>
-                                            <p>Monstruo</p>
-                                        </v-col>
-
-                                    </v-row>
-
-                                    <v-row>
-
-                                        <v-col class="grey--text py-0" cols=5>
-                                            <p>Ciclo Huevo</p>
-                                        </v-col>
-                                        <v-col class="black--text py-0" cols=7>
-                                            <p>Hierba</p>
+                                            <p class="text-capitalize">{{this.pokemonSpecie.egg_groups[0].name}}</p>
                                         </v-col>
 
                                     </v-row>
@@ -94,13 +82,11 @@
                                     PS
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[0].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
-                                        
+                                    :value="pokemonVarieties[selectedForm].stats[0].base_stat">
                                     </v-progress-linear>
                                 </v-col>
                             </v-row>
@@ -111,12 +97,11 @@
                                     Ataque
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[1].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
+                                    :value="pokemonVarieties[selectedForm].stats[1].base_stat">
                                         
                                     </v-progress-linear>
                                 </v-col>
@@ -128,12 +113,11 @@
                                     Defensa
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[2].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
+                                    :value="pokemonVarieties[selectedForm].stats[2].base_stat">
                                     </v-progress-linear>
                                 </v-col>
                             </v-row>
@@ -144,12 +128,11 @@
                                     Atq. Es
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[3].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
+                                    :value="pokemonVarieties[selectedForm].stats[3].base_stat">
                                     </v-progress-linear>
                                 </v-col>
                             </v-row>
@@ -160,12 +143,11 @@
                                     Dfns. Es
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[4].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
+                                    :value="pokemonVarieties[selectedForm].stats[4].base_stat">
                                     </v-progress-linear>
                                 </v-col>
                             </v-row>
@@ -176,19 +158,15 @@
                                     Agilidad
                                 </v-col>
                                 <v-col cols=2 class="black--text pb-0">
-                                    60
+                                    {{pokemonVarieties[selectedForm].stats[5].base_stat}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
                                     <v-progress-linear 
-                                    value="25"
-                                    >
+                                    :value="pokemonVarieties[selectedForm].stats[5].base_stat">
                                     </v-progress-linear>
                                 </v-col>
                             </v-row>
 
-                            <!--Defensas de tipos-->
-                            <h3 class="black--text pb-2">Defensas de tipos</h3>
-                            <p>La efectividad de cada tipo en bulbasaur.</p>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
@@ -205,6 +183,33 @@
 
 <script>
 export default {
+    name: 'PokemonCardInfo',
+    props: {
+        pokemonSpecie:Object,
+        pokemonVarieties: Array,
+        selectedForm: Number
+    },
+    data: () => {
+        return {
+            pokedexDescription:''
+        }
+    },
+    mounted(){
+        this.getDescription(this.pokemonSpecie.flavor_text_entries)
+    },
+    methods: {
+        getDescription(pokemonEntries){
+            for (let i = 0; i < pokemonEntries.length; i++) {
+                if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'sword') {
+                    this.pokedexDescription = pokemonEntries[i].flavor_text;
+                    break;
+                } else if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'lets-go-pikachu') {
+                    this.pokedexDescription = pokemonEntries[i].flavor_text;
+                    break;
+                }
+            }
+        }
+    }
 }
 </script>
 
