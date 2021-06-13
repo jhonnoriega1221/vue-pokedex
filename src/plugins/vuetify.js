@@ -22,7 +22,22 @@ export default new Vuetify({
         grass: '#49d0b0',
         fire: '#fb6c6c',
         water: '#76bdfe',
-        bug: '#A8B820'
+        bug: '#A8B820',
+        normal: '#A8A878',
+        poison: '#A040A0',
+        electric: '#ffce4b',
+        ground: '#E0C068',
+        fairy: '#EE99AC',
+        fighting: '#C03028',
+        psychic: '#F85888',
+        rock: '#B8A038',
+        ghost: '#705898',
+        ice: '#98D8D8',
+        dragon: '#7038F8',
+        dark: '#705848',
+        steel: '#B8B8D0',
+        flying: '#A890F0'
+
 
       },
     },

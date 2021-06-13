@@ -175,7 +175,7 @@
                 <!--Cadena evolutiva-->
                 <v-tab-item>
                     <v-card flat>
-                        <v-card-text>
+                        <v-card-text v-if="evolutionChain.chain.evolves_to.length">
                             <h3 class="black--text pb-7">Cadena evolutiva</h3>
 
                             <!--Fila de la primera evolución (Primer evolve to)-->
@@ -184,7 +184,7 @@
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
                                 <v-col class="my-auto" cols=4>
                                     <div>
-                                        <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"></v-img>
+                                        <v-img class="mx-auto" width="100" :src="evolutionChain.chain.species.url"></v-img>
                                         <p class="d-block text-center">{{evolutionChain.chain.species.name}}</p>
                                     </div>
                                 </v-col>
@@ -196,29 +196,44 @@
 
                                         <!--Columna de las condiciones de evolución-->
                                         <v-col class="my-auto" cols=6>
-                                            <p v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
-                                                Nivel {{evolutionConditions.min_level}}
-                                            </p>
+                                            <div v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
+                                                <p v-if="evolutionConditions.gender"> {{evolutionConditions.gender}}</p>
+                                                <p v-if="evolutionConditions.held_item"> {{evolutionConditions.held_item.name}}</p>
+                                                <p v-if="evolutionConditions.item">Llevar {{evolutionConditions.item.name}}</p>
+                                                <p v-if="evolutionConditions.known_move">Conocer {{evolutionConditions.known_move.name}}</p>
+                                                <p v-if="evolutionConditions.known_move_type">Conocer tipo {{evolutionConditions.known_move_type.name}}</p>
+                                                <p v-if="evolutionConditions.location">En {{evolutionConditions.location.name}}</p>
+                                                <p v-if="evolutionConditions.min_affection">{{evolutionConditions.min_affection}} de afecto</p>
+                                                <p v-if="evolutionConditions.min_beauty">{{evolutionConditions.min_beauty}} de belleza</p>
+                                                <p v-if="evolutionConditions.min_happiness">{{evolutionConditions.min_happiness}} de felicidad</p>
+                                                <p v-if="evolutionConditions.min_level">Nivel {{evolutionConditions.min_level}}</p>
+                                                <p v-if="evolutionConditions.needs_overworld_rain">Mientras llueve</p>
+                                                <p v-if="evolutionConditions.party_species">Tiene que estar {{evolutionConditions.party_species}}</p>
+                                                <p v-if="evolutionConditions.party_type">Tiene que estar tipo {{evolutionConditions.party_type}}</p>
+                                                <p v-if="evolutionConditions.relative_physical_stats">Estadisticas en {{evolutionConditions.relative_physical_stats}}</p>
+                                                <p v-if="evolutionConditions.time_of_day">debe ser {{evolutionConditions.time_of_day}}</p>
+                                                <p v-if="evolutionConditions.trade_species">Intercambiar {{evolutionConditions.trade_species}}</p>
+                                                <p v-if="evolutionConditions.turn_upside_down">Volteado</p>
+                                            </div>
                                         </v-col>
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
-                                            <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png"></v-img>
+                                            <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
                                             <p class="d-block text-center">{{evolveTo.species.name}}</p>
                                         </v-col>
 
                                     </v-row>
                                 </v-col>
                             </v-row>
-                            <v-divider></v-divider>
 
                             <!--Fila de la segunda evolución-->
                             <v-row v-for="secondEvolution in evolutionChain.chain.evolves_to" v-bind:key=secondEvolution.id>
 
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
-                                <v-col class="my-auto" cols=4>
+                                <v-col v-if="secondEvolution.evolves_to.length" class="my-auto" cols=4>
                                     <div>
-                                        <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png"></v-img>
+                                        <v-img class="mx-auto" width="100" :src="secondEvolution.species.url"></v-img>
                                         <p class="d-block text-center">{{secondEvolution.species.name}}</p>
                                     </div>
                                 </v-col>
@@ -230,14 +245,30 @@
 
                                         <!--Columna de las condiciones de evolución-->
                                         <v-col class="my-auto" cols=6>
-                                            <p v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
-                                                Nivel {{evolutionConditions.min_level}}
-                                            </p>
+                                            <div v-for="evolutionConditions in evolveTo.evolution_details" v-bind:key=evolutionConditions.id class="text-center mb-0">
+                                                <p v-if="evolutionConditions.gender"> {{evolutionConditions.gender}}</p>
+                                                <p v-if="evolutionConditions.held_item"> {{evolutionConditions.held_item.name}}</p>
+                                                <p v-if="evolutionConditions.item">Usar {{evolutionConditions.item.name}}</p>
+                                                <p v-if="evolutionConditions.known_move">Conocer {{evolutionConditions.known_move.name}}</p>
+                                                <p v-if="evolutionConditions.known_move_type">Conocer tipo {{evolutionConditions.known_move_type.name}}</p>
+                                                <p v-if="evolutionConditions.location">En {{evolutionConditions.location.name}}</p>
+                                                <p v-if="evolutionConditions.min_affection">{{evolutionConditions.min_affection}} de afecto</p>
+                                                <p v-if="evolutionConditions.min_beauty">{{evolutionConditions.min_beauty}} de belleza</p>
+                                                <p v-if="evolutionConditions.min_happiness">{{evolutionConditions.min_happiness}} de felicidad</p>
+                                                <p v-if="evolutionConditions.min_level">Nivel {{evolutionConditions.min_level}}</p>
+                                                <p v-if="evolutionConditions.needs_overworld_rain">Mientras llueve</p>
+                                                <p v-if="evolutionConditions.party_species">Tiene que estar {{evolutionConditions.party_species}}</p>
+                                                <p v-if="evolutionConditions.party_type">Tiene que estar tipo {{evolutionConditions.party_type}}</p>
+                                                <p v-if="evolutionConditions.relative_physical_stats">Estadisticas en {{evolutionConditions.relative_physical_stats}}</p>
+                                                <p v-if="evolutionConditions.time_of_day">debe ser {{evolutionConditions.time_of_day}}</p>
+                                                <p v-if="evolutionConditions.trade_species">Intercambiar {{evolutionConditions.trade_species}}</p>
+                                                <p v-if="evolutionConditions.turn_upside_down">Volteado</p>
+                                            </div>
                                         </v-col>
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
-                                            <v-img class="mx-auto" width="100" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"></v-img>
+                                            <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
                                             <p class="d-block text-center">{{evolveTo.species.name}}</p>
                                         </v-col>
                                     </v-row>
@@ -247,11 +278,16 @@
                             </v-row>
                             
                         </v-card-text>
+                        <v-card-text v-else>Este pokémon no posee evolución.</v-card-text>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item></v-tab-item>
             </v-tabs>
         </v-card>
+    </div>
+    <div v-else>
+        <v-skeleton-loader type ="image@2" style="background:white">
+        </v-skeleton-loader>
     </div>
 </template>
 
@@ -268,7 +304,8 @@ export default {
     data: () => {
         return {
             pokedexDescription:'',
-            evolutionChain:''
+            evolutionChain:'',
+            evolutionChainArtworks:{}
 
             //Cadena evolutiva
         }
@@ -292,14 +329,60 @@ export default {
                 } else if(pokemonEntries[i].language.name == 'es' && pokemonEntries[i].version.name == 'x') {
                     this.pokedexDescription = pokemonEntries[i].flavor_text;
                     break;
+                } else if(pokemonEntries[i].language.name == 'en' && pokemonEntries[i].version.name == 'sword') {
+                    this.pokedexDescription = pokemonEntries[i].flavor_text;
+                    break;
                 }
             }
         },
         async getEvolutionChain(){
             await axios.get(this.pokemonSpecie.evolution_chain.url).then(
-                res => {
-                    console.log(res.data);
+                async res => {
                     this.evolutionChain = res.data;
+                    //Obtengo especie
+                    await axios.get(this.evolutionChain.chain.species.url).then(
+                        async res => {
+                            //Obtengo artwork
+                            await axios.get(res.data.varieties[0].pokemon.url).then(
+                                res => {
+                                    this.evolutionChain.chain.species.url = res.data.sprites.other["official-artwork"].front_default;
+                                    //Ya obtengo el primer artwork
+                                }
+                            ) //catch artwork
+                        }
+                    ) // catch especie
+                    //Obtengo especies y artwork de la primera evolucion
+                    for(const [i, evolveSpecie] of res.data.chain.evolves_to.entries()){
+                        
+                        //Obtengo especie
+                        await axios.get(evolveSpecie.species.url).then(
+                            async res => {
+                                //Obtengo artwork
+                                await axios.get(res.data.varieties[0].pokemon.url).then(
+                                    res => {
+                                        this.evolutionChain.chain.evolves_to[i].species.url = res.data.sprites.other["official-artwork"].front_default;
+                                        //Ya obtengo un artwork de la primera evolucion
+                                    }
+                                ) //catch artwork
+                            }
+                        ) //catch especie
+
+                        //Obtengo especies y artworks de la segunda evolucion
+                        for(const [j, evolveSpecie2] of evolveSpecie.evolves_to.entries()){
+                            //Obtengo especie
+                            await axios.get(evolveSpecie2.species.url).then(
+                                async res => {
+                                    //obtengo artwork
+                                    await axios.get(res.data.varieties[0].pokemon.url).then(
+                                        res => {
+                                            this.evolutionChain.chain.evolves_to[i].evolves_to[j].species.url = res.data.sprites.other["official-artwork"].front_default
+                                            //Ya obtengo artwork de la segunda evolucion
+                                        }
+                                    ) //catch artwork
+                                }
+                            ) // catch especie
+                        } //Fin segunda evolucion for
+                    } //Fin primera evolucion for
                 }
             ).catch( err => {console.log(err)} )
         }

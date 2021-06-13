@@ -31,7 +31,7 @@
       <v-spacer></v-spacer>
 
       <!--Search bar-->
-      <v-text-field
+      <v-autocomplete
         v-if="!this.$vuetify.breakpoint.mobile || searchMode"
         flat
         light
@@ -41,6 +41,12 @@
         solo
         clearable
         type="text"
+        hide-no-data
+        v-model="searchSelect"
+        :search-input.sync="dataSearch"
+        :items="searchSuggestions"
+        @click:clear="metodoPrueba"
+        append-icon="search"
       >
         <template v-if="$vuetify.breakpoint.mobile" v-slot:prepend-inner>
           <v-btn
@@ -55,16 +61,7 @@
           </v-btn>
         </template>
 
-        <template v-slot:append>
-          <v-btn
-            small
-            icon
-            
-          >
-            <v-icon>search</v-icon>
-          </v-btn>
-        </template>
-      </v-text-field>
+      </v-autocomplete>
 
       <v-spacer></v-spacer>
 
@@ -199,18 +196,47 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: 'AppBar',
     data: () => ({
         logged: false, //PROVISIONAL
-        searchMode: false
+        searchMode: false,
+        dataSearch:null,
+        searchSuggestions:[],
+        searchSelect:null
     }),
+    watch: {
+      dataSearch: function () {
+        this.updateSuggestions();
+        console.log(this.searchSelect)
+        console.log(this.dataSearch)
+      }
+    },
     methods: {
         switchLogged(){
             this.logged = !this.logged;
         },
         switchSearchMode(){
             this.searchMode = !this.searchMode;
+        },
+        async updateSuggestions(){
+          this.searchSuggestions = []
+
+          await axios.get('https://pokeapi.co/api/v2/pokemon-species?limit=898&offset=0').then(
+            res => {
+              for(const pokemonResult of res.data.results){
+                if(this.dataSearch == '' || this.dataSearch == null)
+                  this.searchSuggestions == []
+                else if(pokemonResult.name.slice(0,this.dataSearch.length) === this.dataSearch)
+                  this.searchSuggestions.push(pokemonResult.name)
+              }
+            }
+          )
+        },
+        metodoPrueba(){
+          console.log('hola')
         }
     }
 }
