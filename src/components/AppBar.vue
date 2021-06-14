@@ -1,16 +1,19 @@
 <template>
+  <div>
+
+
     <v-app-bar 
     
       app 
       clipped-left 
-      :color = "searchMode && this.$vuetify.breakpoint.mobile ? 'white' : 'primary'"
+      :color = "$route.hash==='#search' && this.$vuetify.breakpoint.mobile ? 'white' : 'primary'"
       dark
       
     >
       <!--Div del titulo y logo-->
       <div
         class="d-flex"
-        v-if = "!searchMode || !this.$vuetify.breakpoint.mobile">
+        v-if = "$route.hash!='#search' || !this.$vuetify.breakpoint.mobile">
 
         <!--Logo-->
         <v-app-bar-title
@@ -32,21 +35,17 @@
 
       <!--Search bar-->
       <v-autocomplete
-        v-if="!this.$vuetify.breakpoint.mobile || searchMode"
+        v-if="!this.$vuetify.breakpoint.mobile || $route.hash==='#search'"
         flat
         light
-        dense 
+        dense
         label="Buscar" 
         class="mt-6"
         solo
         clearable
-        type="text"
-        hide-no-data
         v-model="searchSelect"
         :search-input.sync="dataSearch"
         :items="searchSuggestions"
-        @click:clear="metodoPrueba"
-        append-icon="search"
       >
         <template v-if="$vuetify.breakpoint.mobile" v-slot:prepend-inner>
           <v-btn
@@ -61,17 +60,30 @@
           </v-btn>
         </template>
 
+        <template v-slot:append>
+          <v-btn
+            small
+            icon
+            rounded
+            v-on:click="switchSearchMode"
+          >
+            <v-icon>
+              search
+            </v-icon>
+          </v-btn>
+        </template>
+
       </v-autocomplete>
 
       <v-spacer></v-spacer>
 
       <!--div de los botones a la derecha de la app bar-->
       <div 
-        v-if = "!searchMode || !this.$vuetify.breakpoint.mobile">
+        v-if = "$route.hash!='#search' || !this.$vuetify.breakpoint.mobile">
         
         <!--Search btn-->
         <v-btn
-          v-if= "!searchMode && this.$vuetify.breakpoint.mobile"
+          v-if= "$route.hash!='#search' && this.$vuetify.breakpoint.mobile"
           v-on:click="switchSearchMode"
           icon
         >
@@ -193,6 +205,13 @@
       </div>
 
     </v-app-bar>
+
+    <v-overlay
+    :value="$route.hash==='#search' && $vuetify.breakpoint.mobile"
+    z-index="4"
+    @click.native="switchSearchMode"
+    ></v-overlay>
+  </div>
 </template>
 
 <script>
@@ -207,21 +226,29 @@ export default {
         searchSuggestions:[],
         searchSelect:null
     }),
-    watch: {
-      dataSearch: function () {
-        this.updateSuggestions();
-        console.log(this.searchSelect)
-        console.log(this.dataSearch)
-      }
+    beforeUpdate() {
+      this.checkSearchHash();
     },
     methods: {
-        switchLogged(){
+        switchLogged(){ //PRIVISIONAL
             this.logged = !this.logged;
         },
-        switchSearchMode(){
-            this.searchMode = !this.searchMode;
+        checkSearchHash(){ //Comprueba que #search sea accedido desde la url y si es asi, elimina el #search
+          if(this.$route.hash == '#search' && !this.searchMode){
+            this.$router.push({hash:''})
+          }
         },
-        async updateSuggestions(){
+        switchSearchMode(){ //Cambia el modo de búsqueda de la barra de búsqueda en mobile
+          if(this.$route.hash == '') {
+            this.searchMode = true;
+            this.$router.push({hash:'search'})
+          }
+          else if(this.$route.hash == '#search'){
+            this.searchMode = false
+            this.$router.back();
+          }
+        },
+        async updateSuggestions(){ //Consulta la api y actualiza los resultados de búsqueda
           this.searchSuggestions = []
 
           await axios.get('https://pokeapi.co/api/v2/pokemon-species?limit=898&offset=0').then(
@@ -233,10 +260,7 @@ export default {
                   this.searchSuggestions.push(pokemonResult.name)
               }
             }
-          )
-        },
-        metodoPrueba(){
-          console.log('hola')
+          ).catch(err => { console.log(err) })
         }
     }
 }

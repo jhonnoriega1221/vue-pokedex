@@ -1,16 +1,22 @@
 <template>
   <v-app v-cloak>
       <!--Navigation-->
+      
     <Navigation/>
 
     <!--App bar-->
     <AppBar/>
 
+
     <!--Main content-->
-    <v-main>
-      <v-container :style="styleBackground">
-        <router-view/>        
+
+    <v-main :class="styleBackground">
+       
+      <v-container >
+        <router-view/>      
+  
       </v-container>
+
     </v-main>
     
   </v-app>
@@ -27,9 +33,15 @@ export default {
   },
   computed:{
     styleBackground(){
-      return this.$route.name=='PokemonInfo' ? 'background-color:#49d0b0' : 'background-color:white';
+      return this.$route.name=='PokemonInfo' ? 'normal' : 'white';
+    }
+  },
+  methods:{
+    prueba(){
+      console.log('jola')
     }
   }
+
 }
 </script>
 

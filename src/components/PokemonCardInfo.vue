@@ -184,7 +184,9 @@
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
                                 <v-col class="my-auto" cols=4>
                                     <div>
-                                        <v-img class="mx-auto" width="100" :src="evolutionChain.chain.species.url"></v-img>
+                                        <v-responsive :aspect-ratio="2/1">
+                                            <v-img class="mx-auto" width="100" :src="evolutionChain.chain.species.url"></v-img>
+                                        </v-responsive>
                                         <p class="d-block text-center">{{evolutionChain.chain.species.name}}</p>
                                     </div>
                                 </v-col>
@@ -219,7 +221,9 @@
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
-                                            <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
+                                            <v-responsive :aspect-ratio="2/1">
+                                                <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
+                                            </v-responsive>
                                             <p class="d-block text-center">{{evolveTo.species.name}}</p>
                                         </v-col>
 
@@ -233,7 +237,9 @@
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
                                 <v-col v-if="secondEvolution.evolves_to.length" class="my-auto" cols=4>
                                     <div>
-                                        <v-img class="mx-auto" width="100" :src="secondEvolution.species.url"></v-img>
+                                        <v-responsive :aspect-ratio="2/1">
+                                            <v-img class="mx-auto" width="100" :src="secondEvolution.species.url"></v-img>
+                                        </v-responsive>
                                         <p class="d-block text-center">{{secondEvolution.species.name}}</p>
                                     </div>
                                 </v-col>
@@ -268,7 +274,9 @@
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
-                                            <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
+                                            <v-responsive :aspect-ratio="2/1">
+                                                <v-img class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
+                                            </v-responsive>
                                             <p class="d-block text-center">{{evolveTo.species.name}}</p>
                                         </v-col>
                                     </v-row>

@@ -1,5 +1,5 @@
 <template>
-    <div class="pokemon-info" >
+    <div>
         <v-row>
             <v-col class="pb-0" cols="12" lg="5">
                 <div v-if="pokemonVarietiesData.length">
@@ -18,7 +18,7 @@
             
             <v-col class="pt-1 " cols="12" lg="7">
                 <div v-if="pokemonVarietiesData.length">
-                    <PokemonCardInfo 
+                    <PokemonCardInfo
                     v-bind:pokemonSpecie="pokemonSpecieData" 
                     v-bind:pokemonVarieties="pokemonVarietiesData"
                     v-bind:selectedForm="selectedFormData"/>
@@ -88,5 +88,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>    
-
 </style>

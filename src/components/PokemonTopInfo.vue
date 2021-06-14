@@ -80,19 +80,18 @@ export default {
     data: () => {
         return{
             selectedForm:0
-
         }
     }
 }
 </script>
 
 <style lang="scss">
-.pokeball-bg{
-        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(103%) contrast(101%) opacity(.2);
+/* .pokeball-bg{
+       filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(103%) contrast(101%) opacity(.2);
         position: absolute;
         top: 10px;
         overflow: hidden;
         right:-120px;
         
-    }
+    }*/
 </style>
