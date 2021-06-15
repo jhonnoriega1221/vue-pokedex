@@ -30,14 +30,14 @@
                     </v-list-item>
 
                     <!--Favoritos-->
-                    <v-list-item to="/lorem">
+                    <!--v-list-item to="/lorem">
                         <v-list-item-icon>
                             <v-icon>star</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
                             <v-list-item-title>Favoritos</v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item>
+                    </v-list-item-->
 
                 </v-list-item-group>
             </v-list>
@@ -60,10 +60,10 @@
                 <v-icon>view_list</v-icon>
             </v-btn>
 
-            <v-btn to="/lorem">
+            <!--v-btn to="/lorem">
                 <span>Favoritos</span>
                 <v-icon>star</v-icon>
-            </v-btn>
+            </v-btn-->
         </v-bottom-navigation>
     </div>
 </template>

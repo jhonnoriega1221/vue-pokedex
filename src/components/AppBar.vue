@@ -94,8 +94,9 @@
           </v-icon>
         </v-btn>
 
+
         <!--Login btn-->
-        <v-btn 
+        <!--v-btn 
           v-if= "!logged"
           color="accent" 
           depressed 
@@ -103,10 +104,10 @@
           v-on:click="switchLogged()"
         >
           Ingresar
-        </v-btn>
+        </v-btn-->
         
         <!--Avatar -->
-        <v-menu 
+        <!--v-menu 
           v-if="logged"
           bottom
           offset-y
@@ -163,7 +164,7 @@
             </v-list-item-content>
           </v-card>
 
-        </v-menu>
+        </v-menu-->
 
         <!--Options menu-->
         <v-menu
@@ -185,28 +186,31 @@
             </v-btn>
           </template>
 
-          <v-list
-            
-          >
-            <v-list-item 
-              link 
-              dense
+          <v-list>
+            <!--v-list-item 
+            link 
+            dense
             >
               <v-list-item-title>Opciones</v-list-item-title>
-            </v-list-item>
+            </v-list-item-->
 
             <v-list-item 
-              link 
-              dense
+            link 
+            dense
+            @click="showAboutDialog()"
             >
               <v-list-item-title>Acerca de</v-list-item-title>
             </v-list-item>
+
           </v-list>
 
         </v-menu>
       </div>
 
     </v-app-bar>
+
+    <AboutInfo
+    />
 
     <v-overlay
     :value="$route.hash==='#search' && $vuetify.breakpoint.mobile"
@@ -218,15 +222,21 @@
 
 <script>
 import axios from "axios";
+import AboutInfo from './AboutInfo.vue'
 
 export default {
     name: 'AppBar',
+    components:{
+      AboutInfo,
+
+    },
     data: () => ({
         logged: false, //PROVISIONAL
+        aboutDialog: false,
         searchMode: false,
-        dataSearch:null,
-        searchSuggestions:[],
-        searchSelect:null
+        dataSearch: null,
+        searchSuggestions: [],
+        searchSelect: null
     }),
     watch:{
       dataSearch: function () {
@@ -267,8 +277,14 @@ export default {
               }
             }
           ).catch(err => { console.log(err) })
-        }
+        },
+
+        showAboutDialog(){
+          if(this.$route.hash==='')
+            this.$router.push({query:{page:this.$route.query.page}, hash:'dialog'})
+          
     }
+  }
 }
 </script>
 

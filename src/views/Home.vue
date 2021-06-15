@@ -1,7 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h3 class="text-weigth-bold">¿Que pokémon estás buscando?</h3>
   </div>
 </template>
 
@@ -10,9 +9,6 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+  
 }
 </script>
