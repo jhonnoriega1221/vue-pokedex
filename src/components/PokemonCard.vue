@@ -34,7 +34,10 @@
                 <!--Pokemon artwork-->
                 <v-col class="pa-0" cols="6">
                     <v-responsive :aspect-ratio="1/1">
-                        <v-img v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'>
+                        <v-img 
+                        v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'
+                        transition="false"
+                        >
                             <template v-slot:placeholder>
                                 <v-skeleton-loader>
                                 </v-skeleton-loader>

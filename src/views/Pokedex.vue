@@ -64,11 +64,13 @@ import axios from 'axios';
             this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
         },
         watch: {
-            paginationPage () { //Actualiza la lista de pokemons al cambiar la ruta
-                this.setPagination();
-                this.pokemonSpeciesURLList=''
-                window.scrollTo(0,0)
-                this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
+            $route (newVal, oldVal) { //Actualiza la lista de pokemons al cambiar la ruta
+                if(oldVal.hash == newVal.hash){
+                    this.setPagination();
+                    this.pokemonSpeciesURLList=''
+                    window.scrollTo(0,0)
+                    this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
+                }
             }
         },
         methods: {
@@ -87,14 +89,14 @@ import axios from 'axios';
             },
             setPagination(){ //Determina que valor debe tener la query "page"
                 if(!this.$route.query.page){
-                    this.$route.query.page = '1'
-                    this.paginationPage = parseInt(this.$route.query.page)
+                    //this.$route.query.page = '1'
+                    this.paginationPage = 1
                 } else {
                     this.paginationPage = parseInt(this.$route.query.page)
                 }
             },
             nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
-                this.$router.push({name:'Pokedex', query:{page:page}})
+                this.$router.push({name:'Pokedex', query:{page:parseInt(page)}})
             }
         }
     }

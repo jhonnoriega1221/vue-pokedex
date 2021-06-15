@@ -35,7 +35,8 @@
 
       <!--Search bar-->
       <v-autocomplete
-        v-if="!this.$vuetify.breakpoint.mobile || $route.hash==='#search'"
+        v-if="!$vuetify.breakpoint.mobile || $route.hash==='#search'"
+        :autofocus="$vuetify.breakpoint.mobile"
         flat
         light
         dense
@@ -46,6 +47,7 @@
         v-model="searchSelect"
         :search-input.sync="dataSearch"
         :items="searchSuggestions"
+        @input="submitSearch"
       >
         <template v-if="$vuetify.breakpoint.mobile" v-slot:prepend-inner>
           <v-btn
@@ -65,7 +67,7 @@
             small
             icon
             rounded
-            v-on:click="switchSearchMode"
+            v-on:click="submitSearch"
           >
             <v-icon>
               search
@@ -226,38 +228,42 @@ export default {
         searchSuggestions:[],
         searchSelect:null
     }),
-    beforeUpdate() {
-      this.checkSearchHash();
+    watch:{
+      dataSearch: function () {
+        this.updateSuggestions()
+      }
     },
     methods: {
         switchLogged(){ //PRIVISIONAL
             this.logged = !this.logged;
         },
-        checkSearchHash(){ //Comprueba que #search sea accedido desde la url y si es asi, elimina el #search
-          if(this.$route.hash == '#search' && !this.searchMode){
-            this.$router.push({hash:''})
+        submitSearch(){
+          if(this.searchSelect != null){
+            this.$router.push({name: 'PokemonInfo', params: {pokemon_name: this.searchSelect}, hash: ''})
+            this.searchMode = false;
           }
         },
         switchSearchMode(){ //Cambia el modo de búsqueda de la barra de búsqueda en mobile
           if(this.$route.hash == '') {
             this.searchMode = true;
-            this.$router.push({hash:'search'})
+            this.$router.push({query:{page:this.$route.query.page}, hash:'search'})
           }
           else if(this.$route.hash == '#search'){
-            this.searchMode = false
             this.$router.back();
+            this.searchMode = false;
           }
         },
+
         async updateSuggestions(){ //Consulta la api y actualiza los resultados de búsqueda
           this.searchSuggestions = []
-
           await axios.get('https://pokeapi.co/api/v2/pokemon-species?limit=898&offset=0').then(
             res => {
               for(const pokemonResult of res.data.results){
                 if(this.dataSearch == '' || this.dataSearch == null)
-                  this.searchSuggestions == []
-                else if(pokemonResult.name.slice(0,this.dataSearch.length) === this.dataSearch)
+                  this.searchSuggestions = []
+                else if(pokemonResult.name.slice(0,this.dataSearch.length).toLowerCase() === this.dataSearch.toLowerCase()){
                   this.searchSuggestions.push(pokemonResult.name)
+                }
               }
             }
           ).catch(err => { console.log(err) })

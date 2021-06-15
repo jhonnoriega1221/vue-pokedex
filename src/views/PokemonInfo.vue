@@ -58,6 +58,17 @@ export default {
         window.scrollTo(0,0);
         this.getPokemonSpecieData(this.$route.params.pokemon_name);
     },
+    watch: {
+        $route: function(newVal, oldVal){
+            if(oldVal.params.pokemon_name != newVal.params.pokemon_name){
+                this.pokemonSpecieData=''
+                this.pokemonVarietiesData=[]
+                this.selectedFormData=0
+                window.scrollTo(0,0)
+                this.getPokemonSpecieData(this.$route.params.pokemon_name)
+            }
+        }   
+    },
     methods:{
         async getPokemonSpecieData(name){
             await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`).then(
