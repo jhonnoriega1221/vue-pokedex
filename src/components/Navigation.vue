@@ -25,7 +25,7 @@
                             <v-icon>view_list</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title>Pokedex</v-list-item-title>
+                            <v-list-item-title>Pokédex</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 

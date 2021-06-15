@@ -36,7 +36,7 @@
                     <v-responsive :aspect-ratio="1/1">
                         <v-img 
                         v-bind:src='pokemonData.sprites.other["official-artwork"].front_default'
-                        transition="false"
+                        transition=none
                         >
                             <template v-slot:placeholder>
                                 <v-skeleton-loader>

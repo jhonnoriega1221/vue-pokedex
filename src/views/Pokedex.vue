@@ -1,7 +1,7 @@
 <template>
     <div class="pokedex" >
         <!--Pokedex title-->
-        <h1 class="pb-7">Pokedex</h1>
+        <h1 class="pb-7">Pokédex</h1>
 
         <!--Pokemons cards row-->
         <div >

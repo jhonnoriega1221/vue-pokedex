@@ -27,6 +27,7 @@
 
         <!--Pokemon artwork-->
         <v-img 
+        transition=none
         contain
         height="300px"
         v-bind:src='pokemonVarieties[selectedForm].sprites.other["official-artwork"].front_default'
@@ -54,6 +55,7 @@
                     v-bind:key="pokemonVarietie.id"
                     >
                         <v-img
+                        transition=none
                         width="44"
                         v-bind:src='pokemonVarietie.sprites.other["official-artwork"].front_default'
                         >

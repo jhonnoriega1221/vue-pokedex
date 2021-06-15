@@ -19,7 +19,7 @@
         <v-app-bar-title
           class="text-h6"
         >
-          <v-icon>home</v-icon>
+          <img width="29" class="pt-1" src="../assets/pokedex.svg">
         </v-app-bar-title>
 
         <!--Titulo-->
