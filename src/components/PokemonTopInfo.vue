@@ -43,7 +43,7 @@
             >
                 <v-btn-toggle
                 mandatory
-                color="primary"
+                color="accent"
                 v-model="selectedForm"
                 @change="$emit('change',selectedForm)"
                 >

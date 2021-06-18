@@ -226,6 +226,8 @@
                                 </v-col>
                             </v-row>
 
+                            <v-divider></v-divider>
+                            
                             <!--Fila de la segunda evolución-->
                             <v-row v-for="secondEvolution in evolutionChain.chain.evolves_to" v-bind:key=secondEvolution.id>
 

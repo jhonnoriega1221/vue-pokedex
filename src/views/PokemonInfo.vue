@@ -76,10 +76,15 @@ export default {
                     this.pokemonSpecieData = res.data
                     //Funcion que obtiene la info de cada pokemon
                     const getPokemonsVarietiesData = async () => {
-                        for (const pokemonDataURL of this.pokemonSpecieData.varieties){
+                        for (const [index, pokemonDataURL] of this.pokemonSpecieData.varieties.entries()){
                             await axios.get(pokemonDataURL.pokemon.url).then(
                                 res => {
-                                    this.pokemonVarietiesData.push(res.data)
+                                    if(this.pokemonSpecieData.name == 'pikachu' ){ //Oculta las demás variedades de Pikachu
+                                        if(index == 0 || index == 14)
+                                            this.pokemonVarietiesData.push(res.data)
+                                    } else {
+                                        this.pokemonVarietiesData.push(res.data)
+                                    }
                                 }
                             ).catch(err => {console.log(err)})
                         }
