@@ -182,10 +182,10 @@
 
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
                                 <v-col class="my-auto" cols=4>
-                                    <div>
-                                            <v-img transition=none class="mx-auto" width="100" :src="evolutionChain.chain.species.url"></v-img>
-                                        <p class="d-block text-center">{{evolutionChain.chain.species.name}}</p>
-                                    </div>
+                                    <v-card class="my-2" flat :to="{ name: 'PokemonInfo', params: { pokemon_name: evolutionChain.chain.species.name}}">
+                                        <v-img transition=none class="mx-auto" width="100" :src="evolutionChain.chain.species.url"></v-img>
+                                        <v-card-text class="pa-0 text-center">{{evolutionChain.chain.species.name}}</v-card-text>
+                                    </v-card>
                                 </v-col>
 
                                 <!--Columna donde van las condiciones de evolución y los pokemones a los que evoluciona (No aplicar v-for)-->
@@ -218,8 +218,10 @@
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
+                                            <v-card class="my-2" flat :to="{ name: 'PokemonInfo', params: { pokemon_name: evolveTo.species.name}}">
                                                 <v-img transition=none class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
-                                            <p class="d-block text-center">{{evolveTo.species.name}}</p>
+                                                <v-card-text class="pa-0 text-center">{{evolveTo.species.name}}</v-card-text>
+                                            </v-card>
                                         </v-col>
 
                                     </v-row>
@@ -234,8 +236,10 @@
                                 <!--Columna donde va el o los pokemón(es) que va a evolucionar-->
                                 <v-col v-if="secondEvolution.evolves_to.length" class="my-auto" cols=4>
                                     <div>
+                                        <v-card class="my-2" flat :to="{ name: 'PokemonInfo', params: { pokemon_name: secondEvolution.species.name}}">
                                             <v-img transition=none class="mx-auto" width="100" :src="secondEvolution.species.url"></v-img>
-                                        <p class="d-block text-center">{{secondEvolution.species.name}}</p>
+                                            <v-card-text class="pa-0 text-center">{{secondEvolution.species.name}}</v-card-text>
+                                        </v-card>
                                     </div>
                                 </v-col>
 
@@ -269,8 +273,10 @@
 
                                         <!--Columna donde se muestra hacia que va a evolucionar-->
                                         <v-col class="my-auto" cols=6>
+                                            <v-card class="my-2" flat :to="{ name: 'PokemonInfo', params: { pokemon_name: evolveTo.species.name}}">
                                                 <v-img transition=none class="mx-auto" width="100" :src="evolveTo.species.url"></v-img>
-                                            <p class="d-block text-center">{{evolveTo.species.name}}</p>
+                                                <v-card-text class="pa-0 text-center">{{evolveTo.species.name}}</v-card-text>
+                                            </v-card>
                                         </v-col>
                                     </v-row>
 
