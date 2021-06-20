@@ -1,6 +1,6 @@
 <template>
     <div class="pokemon-card-info" v-if="evolutionChain">
-        <v-card class="mt-0">
+        <v-card class="mt-md-5 mt-0">
             <v-tabs show-arrows centered>
                 <v-tab>Acerca</v-tab>
                 <v-tab>Estadisticas</v-tab>
