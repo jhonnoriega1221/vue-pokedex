@@ -45,8 +45,6 @@
 <script>
 export default {
 	name: 'AboutInfo',
-	props: {
-	},
 	data:() => {
 		return{
 			showDialog: false
@@ -61,9 +59,9 @@ export default {
 			}
 		}
 	},
-	methods:{
+	methods: {
 		closeDialog(){
-			this.$router.back()
+			this.$router.back();
 		}
 	}
 	

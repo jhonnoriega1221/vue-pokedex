@@ -1,8 +1,42 @@
 <template>
     <div class="pokedex" >
-        <!--Pokedex title-->
-        <h1 class="pb-7">Pokédex</h1>
+        <div class="d-flex">
+            <!--Pokedex title-->
+            <div>
+                <h1 class="pb-7 pr-3">Pokédex</h1>
+            </div>
 
+            <!--Filter button (Desktop)-->
+
+            <v-btn
+            text
+            color="accent"
+            class="mt-2"
+            :hidden="this.$vuetify.breakpoint.mobile"
+            @click="showFilterDialog()"
+            >
+                <v-icon left>filter_alt</v-icon>
+            Filtrar
+            </v-btn>
+        </div>
+
+        <!--Filter FAB button (Mobile)-->
+        <v-btn
+        fab
+        elevation="2"
+        :hidden="$route.hash=='#search'"
+        right
+        color="accent"
+        fixed
+        bottom
+        large
+        class="mb-14"
+        @click="showFilterDialog()"
+        v-if="this.$vuetify.breakpoint.mobile"
+        >
+            <v-icon>filter_alt</v-icon>
+        </v-btn>
+        
         <!--Pokemons cards row-->
         <div >
             <v-row>
@@ -30,26 +64,32 @@
 
         <!--Pokedex pagination-->
         <v-pagination
-        class="py-8"
+        class="py-8 mb-12 mb-lg-0"
         :length="75"
         :total-visible="8"
         circle
         v-model="paginationPage"
         @input="nextPage"
         >
+
         </v-pagination>
-        
+
+        <!--Form de filtros-->
+        <FilterForm/>
+
     </div>
 </template>
 
 <script>
 import Pokecard from '@/components/PokemonCard.vue'
+import FilterForm from '@/components/FilterForm.vue'
 
 import axios from 'axios';
 
     export default {
         components: {
-            Pokecard
+            Pokecard,
+            FilterForm
         },
         data: () => {
             return {
@@ -87,6 +127,7 @@ import axios from 'axios';
                     }
                 )
             },
+
             setPagination(){ //Determina que valor debe tener la query "page"
                 if(!this.$route.query.page){
                     //this.$route.query.page = '1'
@@ -95,8 +136,13 @@ import axios from 'axios';
                     this.paginationPage = parseInt(this.$route.query.page)
                 }
             },
+
             nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
                 this.$router.push({name:'Pokedex', query:{page:parseInt(page)}})
+            },
+
+            showFilterDialog(){
+                this.$router.push({query:{page:this.$route.query.page}, hash:'filter'})
             }
         }
     }

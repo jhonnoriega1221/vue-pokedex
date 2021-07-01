@@ -9,7 +9,7 @@
                 <h1 class="text-capitalize white--text">{{pokemonSpecie.name}}</h1>
             </v-col>
             <v-col cols=6 class="pb-0">
-                <h4 class="white--text font-weight-bold text-right py-3">#{{pokemonSpecie.pokedex_numbers[0].entry_number}}</h4>
+                <h4 class="white--text font-weight-bold text-right">#{{pokemonSpecie.pokedex_numbers[0].entry_number}}</h4>
             </v-col>
         </v-row>
         

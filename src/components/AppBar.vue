@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
     <v-app-bar 
     
       app 
@@ -209,9 +207,11 @@
 
     </v-app-bar>
 
+    <!--About dialog-->
     <AboutInfo
     />
 
+    <!--Overlay de búsqueda-->
     <v-overlay
     :value="$route.hash==='#search' && $vuetify.breakpoint.mobile"
     z-index="4"
@@ -279,10 +279,8 @@ export default {
           ).catch(err => { console.log(err) })
         },
 
-        showAboutDialog(){
-          if(this.$route.hash==='')
-            this.$router.push({query:{page:this.$route.query.page}, hash:'dialog'})
-          
+      showAboutDialog(){
+        this.$router.push({query:{page:this.$route.query.page}, hash:'dialog'})
     }
   }
 }

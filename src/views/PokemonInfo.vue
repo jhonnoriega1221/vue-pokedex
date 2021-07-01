@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row>
+        <v-row class="">
             <v-col class="pb-0" cols="12" lg="5">
                 <div v-if="pokemonVarietiesData.length">
                     <PokemonTopInfo
@@ -16,7 +16,7 @@
                 </div>
             </v-col>
             
-            <v-col class="pt-1 " cols="12" lg="7">
+            <v-col class="pt-1 pt-md-0" cols="12" lg="7">
                 <div v-if="pokemonVarietiesData.length">
                     <PokemonCardInfo
                     v-bind:pokemonSpecie="pokemonSpecieData" 
@@ -24,7 +24,7 @@
                     v-bind:selectedForm="selectedFormData"/>
                 </div>
                     <div v-else>
-                    <v-skeleton-loader type ="image@2" style="background:white">
+                    <v-skeleton-loader class="mt-0 mt-md-5" type ="image@2" style="background:white">
 
                     </v-skeleton-loader>
                 </div>
