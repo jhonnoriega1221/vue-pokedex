@@ -225,62 +225,65 @@ import axios from "axios";
 import AboutInfo from './AboutInfo.vue'
 
 export default {
-    name: 'AppBar',
-    components:{
-      AboutInfo,
+  name: 'AppBar',
+  components:{
+    AboutInfo,
 
+  },
+  data: () => ({
+    logged: false, //PROVISIONAL
+    aboutDialog: false,
+    searchMode: false,
+    dataSearch: null,
+    searchSuggestions: [],
+    searchSelect: null
+  }),
+  watch:{
+    dataSearch: function () {
+      this.updateSuggestions()
+    }
+  },
+  methods: {
+    switchLogged(){ //PRIVISIONAL
+        this.logged = !this.logged;
     },
-    data: () => ({
-        logged: false, //PROVISIONAL
-        aboutDialog: false,
-        searchMode: false,
-        dataSearch: null,
-        searchSuggestions: [],
-        searchSelect: null
-    }),
-    watch:{
-      dataSearch: function () {
-        this.updateSuggestions()
+    submitSearch(){
+      if(this.searchSelect != null){
+        this.$router.push({name: 'PokemonInfo', params: {pokemon_name: this.searchSelect}, hash: ''})
+        this.searchMode = false;
       }
     },
-    methods: {
-        switchLogged(){ //PRIVISIONAL
-            this.logged = !this.logged;
-        },
-        submitSearch(){
-          if(this.searchSelect != null){
-            this.$router.push({name: 'PokemonInfo', params: {pokemon_name: this.searchSelect}, hash: ''})
-            this.searchMode = false;
-          }
-        },
-        switchSearchMode(){ //Cambia el modo de búsqueda de la barra de búsqueda en mobile
-          if(this.$route.hash == '') {
-            this.searchMode = true;
-            this.$router.push({query:{page:this.$route.query.page}, hash:'search'})
-          }
-          else if(this.$route.hash == '#search'){
-            this.$router.back();
-            this.searchMode = false;
-          }
-        },
+    switchSearchMode(){ //Cambia el modo de búsqueda de la barra de búsqueda en mobile
+      if(this.$route.hash == '') {
+        this.searchMode = true;
+        this.$router.push({query:{page:this.$route.query.page}, hash:'search'})
+      }
+      else if(this.$route.hash == '#search'){
+        this.$router.back();
+        this.searchMode = false;
+      }
+    },
 
-        async updateSuggestions(){ //Consulta la api y actualiza los resultados de búsqueda
-          this.searchSuggestions = []
-          await axios.get('https://pokeapi.co/api/v2/pokemon-species?limit=898&offset=0').then(
-            res => {
-              for(const pokemonResult of res.data.results){
-                if(this.dataSearch == '' || this.dataSearch == null)
-                  this.searchSuggestions = []
-                else if(pokemonResult.name.slice(0,this.dataSearch.length).toLowerCase() === this.dataSearch.toLowerCase()){
-                  this.searchSuggestions.push(pokemonResult.name)
-                }
-              }
+    async updateSuggestions(){ //Consulta la api y actualiza los resultados de búsqueda
+      this.searchSuggestions = []
+      await axios.get('https://pokeapi.co/api/v2/pokemon-species?limit=898&offset=0').then(
+        res => {
+          for(const pokemonResult of res.data.results){
+            if(this.dataSearch == '' || this.dataSearch == null)
+              this.searchSuggestions = []
+            else if(pokemonResult.name.slice(0,this.dataSearch.length).toLowerCase() === this.dataSearch.toLowerCase()){
+              this.searchSuggestions.push(pokemonResult.name)
             }
-          ).catch(err => { console.log(err) })
-        },
+          }
+        }
+      ).catch(err => { console.log(err) })
+    },
 
-      showAboutDialog(){
-        this.$router.push({query:{page:this.$route.query.page}, hash:'dialog'})
+    showAboutDialog(){
+      this.$router.push({
+        query:this.$route.query,
+        hash:'dialog'
+      })
     }
   }
 }

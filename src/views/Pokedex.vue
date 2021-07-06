@@ -29,7 +29,6 @@
         color="accent"
         fixed
         bottom
-        large
         class="mb-14"
         @click="showFilterDialog()"
         v-if="this.$vuetify.breakpoint.mobile"
@@ -86,66 +85,84 @@ import FilterForm from '@/components/FilterForm.vue'
 
 import axios from 'axios';
 
-    export default {
-        components: {
-            Pokecard,
-            FilterForm
-        },
-        data: () => {
-            return {
-                pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API
-                apiLimit:12, //Limite de consulta de la API
-                apiOffset:0, //Offset de la consulta de la API
-                paginationPage:0 //Posición del paginador
-            }
-        },
-        mounted(){
-            this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
-            this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
-        },
-        watch: {
-            $route (newVal, oldVal) { //Actualiza la lista de pokemons al cambiar la ruta
-                if(oldVal.hash == newVal.hash){
-                    this.setPagination();
-                    this.pokemonSpeciesURLList=''
-                    window.scrollTo(0,0)
-                    this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
-                }
-            }
-        },
-        methods: {
-            async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
-                this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada
-
-                await axios.get(`https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${this.apiOffset}`).then(
-                    res => {
-                        this.pokemonSpeciesURLList = res.data.results
-                    }
-                ).catch(
-                    err => {
-                        console.log(err);
-                    }
-                )
-            },
-
-            setPagination(){ //Determina que valor debe tener la query "page"
-                if(!this.$route.query.page){
-                    //this.$route.query.page = '1'
-                    this.paginationPage = 1
-                } else {
-                    this.paginationPage = parseInt(this.$route.query.page)
-                }
-            },
-
-            nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
-                this.$router.push({name:'Pokedex', query:{page:parseInt(page)}})
-            },
-
-            showFilterDialog(){
-                this.$router.push({query:{page:this.$route.query.page}, hash:'filter'})
+export default {
+    components: {
+        Pokecard,
+        FilterForm
+    },
+    data: () => {
+        return {
+            pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API
+            apiLimit:12, //Limite de consulta de la API
+            apiOffset:0, //Offset de la consulta de la API
+            paginationPage:0 //Posición del paginador
+        }
+    },
+    mounted(){
+        this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
+        this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
+    },
+    watch: {
+        $route (newVal, oldVal) { //Actualiza la lista de pokemons al cambiar la ruta
+            if(oldVal.hash == newVal.hash){
+                this.setPagination();
+                this.pokemonSpeciesURLList=''
+                window.scrollTo(0,0)
+                this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
             }
         }
+    },
+    methods: {
+        async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
+            this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada
+
+            await axios.get(`https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${this.apiOffset}`).then(
+                res => {
+                    this.pokemonSpeciesURLList = res.data.results
+                }
+            ).catch(
+                err => {
+                    console.log(err);
+                }
+            )
+        },
+
+        setPagination(){ //Determina que valor debe tener la query "page"
+            if(!this.$route.query.page){
+                //this.$route.query.page = '1'
+                this.paginationPage = 1
+            } else {
+                this.paginationPage = parseInt(this.$route.query.page)
+            }
+        },
+
+        nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
+            this.$router.push({
+                    name:'Pokedex',
+                    query:{
+                        type:this.$route.query.type,
+                        region:this.$route.query.region,
+                        groupby:this.$route.query.groupby,
+                        order:this.$route.query.order,
+                        page:parseInt(page)
+                }
+            })
+        },
+
+        showFilterDialog(){
+            this.$router.push({
+                query: {
+                    type:this.$route.query.type,
+                    region:this.$route.query.region,
+                    groupby:this.$route.query.groupby,
+                    order:this.$route.query.order,
+                    page:this.$route.query.page
+                },
+                hash:'filter'
+            })
+        }
     }
+}
 </script>
 
 <style lang="scss">
