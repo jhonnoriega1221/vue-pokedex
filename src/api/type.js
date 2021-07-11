@@ -2,14 +2,11 @@ import httpClient from './httpClient';
 
 const END_POINT = '/type'
 
-const getAllPokemonSpecies = () => {
-	let pokemon_specie = httpClient.get(`${END_POINT}?limit=898`);
-	return pokemon_specie
-}
+const getAllTypes = () => httpClient.get(`${END_POINT}?limit=20`);
 
-const getPokemonSpecie = (pokemonSpecie_id) => httpClient.get(END_POINT,{pokemonSpecie_id});
+const getType = (type_id) => httpClient.get(`${END_POINT}/${type_id}`);
 
 export {
-	getAllPokemonSpecies,
-	getPokemonSpecie
+	getAllTypes,
+	getType
 }

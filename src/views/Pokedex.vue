@@ -93,6 +93,8 @@ export default {
     },
     data: () => {
         return {
+            pokemons: [],
+            pokemonsPagination: [],
             isLoading: false,
             pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API
             apiLimit: 12, //Limite de consulta de la API
@@ -101,7 +103,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('pokedex', ['getPokedexes'])
+        ...mapGetters('pokedex', ['getPokedexes', 'getPokedex'])
     },
     async mounted() {
         if( this.getPokedexes.length === 0 ) {
@@ -112,6 +114,10 @@ export default {
             this.isLoading = false;
         }
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
+
+        this.getPokemonSpecies();
+
+
         this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
     },
     watch: {
@@ -125,6 +131,41 @@ export default {
         }
     },
     methods: {
+
+        //Verifica si está activado algún filtro
+        async getPokemonSpecies(){
+            if(
+            (this.$route.query.pokedex === 'national' || this.$route.query.pokedex === undefined) && 
+            (this.$route.query.typeone === 'all' || this.$route.query.typeone === undefined) && 
+            (this.$route.query.typetwo === 'all' || this.$route.query.typetwo === undefined)
+            ){
+                //Si No hay ningún filtro activado entonces obtiene la lista de pokemons en la pokedex nacional
+                if(typeof(this.getPokedex('national').url) === 'string') {
+                    //Pendiente colocar loading
+                    await this.$store.dispatch('pokedex/fetchPokedex', 'national');
+                    //Pendiente colocar loading
+                }
+                this.pokemons = this.getPokedex('national').url.pokemon_entries;
+            }
+
+            this.setPokemonPagination();
+
+
+        },
+
+        setPokemonPagination(){
+            let initPosition = this.apiOffset * (this.paginationPage-1);
+            let endPosition = this.apiLimit * this.paginationPage;
+
+            if(this.pokemonsPagination.length > 0)
+                this.pokemonsPagination = []
+
+            for(let i = 0; initPosition < endPosition; i++){
+                this.pokemonsPagination.push(this.pokemons[initPosition])
+                initPosition++;
+            }
+            console.log(this.pokemonsPagination)
+        },
 
         async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
             this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada

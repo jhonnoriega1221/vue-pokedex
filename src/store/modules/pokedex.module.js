@@ -11,13 +11,13 @@ const getters = {
 		return state.pokedexes;
 	},
 
-	getPokedex(state, id){
-		return state.pokedex
+	getPokedex: (state) => (id) => {
+		return state.pokedexes.find(pokedex => pokedex.name === id);
 	}
 };
 
 const actions = {
-	async fetchPokedexes({ commit }, id) {
+	async fetchPokedexes({ commit }) {
 		try {
 			const response = await getAllPokedexes();
 			commit('SET_POKEDEXES', response.data.results);
@@ -26,13 +26,20 @@ const actions = {
 		}
 	},
 
-	fetchPokedex({ state, commit }, pokedexName) {
-		let position = 0;
-		for(const [i, pokedexes] of state.pokedexes){
+	async fetchPokedex({ state, commit }, pokedexName) {
+		let positionEdit = 0;
+		for(const [i, pokedexes] of state.pokedexes.entries()){
 			if(pokedexes.name === pokedexName){
-				position = i;
+				positionEdit = i;
 				break;
 			}
+		}
+
+		try{
+			const response = await getPokedex(pokedexName);
+			commit('SET_POKEDEX', {response, positionEdit});
+		} catch (error) {
+			console.log(error);
 		}
 	}
 };
@@ -41,6 +48,9 @@ const actions = {
 const mutations = {
 	SET_POKEDEXES(state, data) {
 		state.pokedexes = data;
+	},
+	SET_POKEDEX(state, payload) {
+		state.pokedexes[payload.positionEdit].url = payload.response.data;
 	}
 };
 

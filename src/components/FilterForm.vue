@@ -256,7 +256,7 @@ export default {
 			}
 		},
 
-		selectedRegion: async function(newValue, oldValue){
+		selectedRegion: async function(newValue, oldValue){ //Considerar la opción de colocar esto en un update()
 			if(newValue !== oldValue){
 				if(this.selectedRegion === 'all'){
 					this.pokedexes = [];
