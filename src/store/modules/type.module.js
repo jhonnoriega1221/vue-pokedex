@@ -9,6 +9,10 @@ const state = {
 const getters = {
 	getTypes(state) {
 		return state.types;
+	},
+
+	getType: (state) => (id) => {
+		return state.types.find(type => type.name === id);
 	}
 };
 

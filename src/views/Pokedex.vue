@@ -103,7 +103,8 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('pokedex', ['getPokedexes', 'getPokedex'])
+        ...mapGetters('pokedex', ['getPokedexes', 'getPokedex']),
+        ...mapGetters('type', ['getTypes', 'getType'])
     },
     async mounted() {
         if( this.getPokedexes.length === 0 ) {
@@ -146,7 +147,8 @@ export default {
                     //Pendiente colocar loading
                 }
                 this.pokemons = this.getPokedex('national').url.pokemon_entries;
-            }
+            } else 
+                await this.filterPokedex();
 
             this.setPokemonPagination();
 
@@ -165,6 +167,42 @@ export default {
                 initPosition++;
             }
             console.log(this.pokemonsPagination)
+        },
+
+        async filterPokedex() {
+            
+
+            if( //Si solo se filtró la pokedex
+            (this.$route.query.typeone === 'all' || this.$route.query.typeone === undefined) &&
+            (this.$route.query.typetwo === 'all' || this.$route.query.typetwo === undefined)
+            ) {
+
+                //Lógica para filtrar la pokedex
+
+                //Si el state está vacio
+                if(typeof(this.getPokedex(this.$route.query.pokedex).url) === 'string') {
+                    //Pendiente colocar loading
+                    await this.$store.dispatch('pokedex/fetchPokedex', this.$route.query.pokedex);
+                    //Pendiente colocar loading
+                }
+                this.pokemons = this.getPokedex(this.$route.query.pokedex).url.pokemon_entries;
+
+            } else if( //Si solo se filtraron los tipos
+            this.$route.query.pokedex === 'national' ||
+            this.$route.query.pokedex === undefined
+            ) {
+
+                //Lógica para filtrar los tipos
+
+                //Si el state está vacío
+                                
+
+            } else { //Si se filtran ambos
+                const pokedexEntries = [];
+                const typeEntries = [];
+                console.log('Else')
+            }
+
         },
 
         async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
