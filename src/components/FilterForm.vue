@@ -83,7 +83,28 @@
 		                  	</v-select>
 						</v-col>
 
-						<!--Tipos -->
+						<!--Pokedexes-->
+						<v-col
+						cols="12"
+						md="6"
+						>
+							<v-select
+							:loading=isLoadingPokedexes
+							:disabled=isLoadingPokedexes
+							outlined
+							v-model="selectedPokedex"
+		                  	name="pokedexes"
+		                  	label="Pokedex"
+		                  	required
+		                  	:items="pokedexes"
+		                  	item-text="name"
+		                  	item-value="value"
+		                  	>
+		                  			
+		                  	</v-select>
+						</v-col>
+
+						<!--Tipo 1 -->
 						<v-col
 						cols="12"
 						md="6"
@@ -91,11 +112,31 @@
 							<v-select
 							
 							outlined
-		                  	v-model="selectedType"
-		                  	name="types"
-		                  	label="Tipo"
+		                  	v-model="selectedTypePrimary"
+		                  	name="primaryTypes"
+		                  	label="Tipo primario"
 		                  	required
-		                  	:items="types"
+		                  	:items="primaryTypes"
+		                  	item-text="name"
+		                  	item-value="value"
+		                  	>
+		                  			
+		                  	</v-select>
+						</v-col>
+
+						<!--Tipo 2-->
+						<v-col
+						cols="12"
+						md="6"
+						>
+							<v-select
+							
+							outlined
+		                  	v-model="selectedTypeSecondary"
+		                  	name="secondaryTypes"
+		                  	label="Tipo secundario"
+		                  	required
+		                  	:items="secondaryTypes"
 		                  	item-text="name"
 		                  	item-value="value"
 		                  	>
@@ -130,13 +171,39 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
 	name:'FilterForm',
 	data:() => {
 		return {
-			//Tipos
-			selectedType:'all',
-			types: [{name: 'Todos', value: 'all'},
+			isLoadingPokedexes:false,
+
+			//Tipo primario
+			selectedTypePrimary:'all',
+			primaryTypes: [{name: 'Todos', value: 'all'},
+					{name: 'Planta', value: 'grass'},
+					{name: 'Fuego', value: 'fire'},
+					{name: 'Agua', value: 'water'},
+					{name: 'Bicho siuuuu', value: 'bug'},
+					{name: 'Normal', value: 'normal'},
+					{name: 'Veneno', value: 'poison'},
+					{name: 'Eléctrico', value: 'electric'},
+					{name: 'Tierra', value: 'ground'},
+					{name: 'Hada', value: 'fairy'},
+					{name: 'Lucha', value: 'fighting'},
+					{name: 'Psiquico', value: 'psychic'},
+					{name: 'Roca', value: 'rock'},
+					{name: 'Fantasma', value: 'ghost'},
+					{name: 'Hielo', value: 'ice'},
+					{name: 'Dragón', value: 'dragon'},
+					{name: 'Oscuro', value: 'dark'},
+					{name: 'Hierro', value: 'steel'},
+					{name: 'Volador', value: 'flying'}],
+
+			//Tipo secundario
+			selectedTypeSecondary:'all',
+			secondaryTypes: [{name: 'Todos', value: 'all'},
 					{name: 'Planta', value: 'grass'},
 					{name: 'Fuego', value: 'fire'},
 					{name: 'Agua', value: 'water'},
@@ -157,16 +224,12 @@ export default {
 					{name: 'Volador', value: 'flying'}],
 
 			//Regiónes
-			selectedRegion: 'national',
-			regions: [{name: 'Nacional', value: 'national'},
-					{name: 'Kanto (I)', value: 'kanto'},
-					{name: 'Johto (II)', value: 'johto'},
-					{name: 'Hoenn (III)', value: 'hoenn'},
-					{name: 'Sinnoh (IV)', value: 'sinnoh'},
-					{name: 'Teselia (V)', value: 'unova'},
-					{name: 'Kalos (VI)', value: 'kalos'},
-					{name: 'Alola (VII)', value: 'alola'},
-					{name: 'Galar (VIII)', value: 'galar'}],
+			selectedRegion: 'all',
+			regions: [{name: 'Todas', value: 'all'}],
+
+			//Pokedexes
+			selectedPokedex: 'national',
+			pokedexes: [{name: 'Nacional', value: 'national'}],
 
 			//Agrupar por
 			selectedGroupBy:'number',
@@ -181,6 +244,9 @@ export default {
 			showDialog: false
 		}
 	},
+	computed: {
+		...mapGetters('region', ['getRegions', 'getRegion'])
+	},
 	watch: {
 		$route: function(){
 			if(this.$route.hash == '#filter'){
@@ -188,45 +254,64 @@ export default {
 			} else {
 				this.showDialog = false;
 			}
+		},
+
+		selectedRegion: async function(newValue, oldValue){
+			if(newValue !== oldValue){
+				if(this.selectedRegion === 'all'){
+					this.pokedexes = [];
+					this.pokedexes = [{name: 'Nacional', value: 'national'}]
+					this.selectedPokedex = this.pokedexes[0].value
+				} else {
+					if(typeof(this.getRegion(newValue).url) === 'string'){
+						this.isLoadingPokedexes = true;
+						await this.$store.dispatch('region/fetchRegion', newValue);
+						this.isLoadingPokedexes = false;
+					}
+					this.pokedexes=[];
+					for(const pokedexes of this.getRegion(newValue).url.pokedexes){
+						this.pokedexes.push(pokedexes.name)
+					}
+					this.selectedPokedex = this.pokedexes[0]
+
+				}
+			}
 		}
 	},
-	mounted(){
-		this.selectedType = this.$route.query.type
-		this.selectedRegion = this.$route.query.region
-		this.selectedOrder = this.$route.query.order
-		this.selectedGroupBy = this.$route.query.groupby
+	async mounted(){
 
-		if(this.$route.query.type === undefined)
-			this.selectedType = 'all'
-		else
-			this.selectedType = this.$route.query.type
+		if( this.getRegions.length === 0)  {
+			await this.$store.dispatch('region/fetchRegions')
+		}
 
-		if(this.$route.query.region === undefined)
-			this.selectedRegion = 'national'
-		else
-			this.selectedRegion = this.$route.query.region
+		for(const region of this.getRegions){
+			this.regions.push({name: region.name, value: region.name})
+		}
 
-		if(this.$route.query.groupby === undefined)
-			this.selectedGroupBy = 'number'
-		else
-			this.selectedGroupBy = this.$route.query.groupby
-
-		if(this.$route.query.order === undefined)
-			this.selectedOrder = 'asc'
-		else
-			this.selectedOrder = this.$route.query.order
+		this.restartData();
 	},
 	methods: {
-		closeDialog(){
-			if(this.$route.query.type === undefined)
-				this.selectedType = 'all'
+
+		restartData(){
+			if(this.$route.query.typeone === undefined)
+				this.selectedTypePrimary = 'all'
 			else
-				this.selectedType = this.$route.query.type
+				this.selectedTypePrimary = this.$route.query.typeone
+
+			if(this.$route.query.typetwo === undefined)
+				this.selectedTypeSecondary = 'all'
+			else
+				this.selectedTypeSecondary = this.$route.query.typetwo
 
 			if(this.$route.query.region === undefined)
-				this.selectedRegion = 'national'
+				this.selectedRegion = 'all'
 			else
 				this.selectedRegion = this.$route.query.region
+
+			if(this.$route.query.pokedex === undefined)
+				this.selectedPokedex = 'national'
+			else
+				this.selectedPokedex = this.$route.query.pokedex
 
 			if(this.$route.query.groupby === undefined)
 				this.selectedGroupBy = 'number'
@@ -237,14 +322,20 @@ export default {
 				this.selectedOrder = 'asc'
 			else
 				this.selectedOrder = this.$route.query.order
-			
+		},
+
+		closeDialog(){
+			this.restartData();
 			this.$router.back();
 		},
+
 		applyFilter(){
 			this.$router.push({hash:'',
 				query:{
-					type:this.selectedType,
+					typeone:this.selectedTypePrimary,
+					typetwo:this.selectedTypeSecondary,
 					region:this.selectedRegion,
+					pokedex:this.selectedPokedex,
 					groupby:this.selectedGroupBy,
 					order:this.selectedOrder,
 					page:this.$route.query.page

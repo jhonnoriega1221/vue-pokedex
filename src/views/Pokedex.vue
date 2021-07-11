@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Pokecard from '@/components/PokemonCard.vue'
 import FilterForm from '@/components/FilterForm.vue'
 
@@ -92,19 +93,30 @@ export default {
     },
     data: () => {
         return {
+            isLoading: false,
             pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API
-            apiLimit:12, //Limite de consulta de la API
-            apiOffset:0, //Offset de la consulta de la API
-            paginationPage:0 //Posición del paginador
+            apiLimit: 12, //Limite de consulta de la API
+            apiOffset: 0, //Offset de la consulta de la API
+            paginationPage: 0 //Posición del paginador
         }
     },
-    mounted(){
+    computed: {
+        ...mapGetters('pokedex', ['getPokedexes'])
+    },
+    async mounted() {
+        if( this.getPokedexes.length === 0 ) {
+            //loadingScreen
+            this.isLoading = true;                       
+            await this.$store.dispatch('pokedex/fetchPokedexes')
+
+            this.isLoading = false;
+        }
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
         this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API
     },
     watch: {
         $route (newVal, oldVal) { //Actualiza la lista de pokemons al cambiar la ruta
-            if(oldVal.hash == newVal.hash){
+            if( oldVal.hash == newVal.hash ) {
                 this.setPagination();
                 this.pokemonSpeciesURLList=''
                 window.scrollTo(0,0)
@@ -113,9 +125,11 @@ export default {
         }
     },
     methods: {
+
         async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
             this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada
 
+            
             await axios.get(`https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${this.apiOffset}`).then(
                 res => {
                     this.pokemonSpeciesURLList = res.data.results
@@ -140,8 +154,10 @@ export default {
             this.$router.push({
                     name:'Pokedex',
                     query:{
-                        type:this.$route.query.type,
+                        typeone:this.$route.query.typeone,
+                        typetwo:this.$route.query.typetwo,
                         region:this.$route.query.region,
+                        pokedex:this.$route.query.pokedex,
                         groupby:this.$route.query.groupby,
                         order:this.$route.query.order,
                         page:parseInt(page)
@@ -152,8 +168,10 @@ export default {
         showFilterDialog(){
             this.$router.push({
                 query: {
-                    type:this.$route.query.type,
+                    typeone:this.$route.query.typeone,
+                    typetwo:this.$route.query.typetwo,
                     region:this.$route.query.region,
+                    pokedex:this.$route.query.pokedex,
                     groupby:this.$route.query.groupby,
                     order:this.$route.query.order,
                     page:this.$route.query.page
