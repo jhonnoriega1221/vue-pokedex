@@ -64,6 +64,25 @@
 
 					<v-row>
 
+						<!--Tipos -->
+						<v-col
+						cols="12"
+						>
+							<v-select
+							
+							outlined
+		                  	v-model="selectedType"
+		                  	name="types"
+		                  	label="Tipo"
+		                  	required
+		                  	:items="types"
+		                  	item-text="name"
+		                  	item-value="value"
+		                  	>
+		                  			
+		                  	</v-select>
+						</v-col>
+
 						<!--Regiones-->
 						<v-col
 						cols="12"
@@ -104,45 +123,6 @@
 		                  	</v-select>
 						</v-col>
 
-						<!--Tipo 1 -->
-						<v-col
-						cols="12"
-						md="6"
-						>
-							<v-select
-							
-							outlined
-		                  	v-model="selectedTypePrimary"
-		                  	name="primaryTypes"
-		                  	label="Tipo primario"
-		                  	required
-		                  	:items="primaryTypes"
-		                  	item-text="name"
-		                  	item-value="value"
-		                  	>
-		                  			
-		                  	</v-select>
-						</v-col>
-
-						<!--Tipo 2-->
-						<v-col
-						cols="12"
-						md="6"
-						>
-							<v-select
-							
-							outlined
-		                  	v-model="selectedTypeSecondary"
-		                  	name="secondaryTypes"
-		                  	label="Tipo secundario"
-		                  	required
-		                  	:items="secondaryTypes"
-		                  	item-text="name"
-		                  	item-value="value"
-		                  	>
-		                  			
-		                  	</v-select>
-						</v-col>
 					</v-row>
 				</v-container>
 			</v-card-text>
@@ -161,10 +141,11 @@
 				<v-btn
 					color="primary"
 					
-					v-on:click="applyFilter"
+					v-on:click="$emit('applyFilter', selectedType, selectedRegion, selectedPokedex, selectedOrder, selectedGroupBy)" 
+
 				>
 					Aplicar
-				</v-btn>
+				</v-btn> <!--Por ahora paso los valores asi en el v-on:click, pero hay que considerar una mejor forma-->
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
@@ -179,49 +160,9 @@ export default {
 		return {
 			isLoadingPokedexes:false,
 
-			//Tipo primario
-			selectedTypePrimary:'all',
-			primaryTypes: [{name: 'Todos', value: 'all'},
-					{name: 'Planta', value: 'grass'},
-					{name: 'Fuego', value: 'fire'},
-					{name: 'Agua', value: 'water'},
-					{name: 'Bicho siuuuu', value: 'bug'},
-					{name: 'Normal', value: 'normal'},
-					{name: 'Veneno', value: 'poison'},
-					{name: 'Eléctrico', value: 'electric'},
-					{name: 'Tierra', value: 'ground'},
-					{name: 'Hada', value: 'fairy'},
-					{name: 'Lucha', value: 'fighting'},
-					{name: 'Psiquico', value: 'psychic'},
-					{name: 'Roca', value: 'rock'},
-					{name: 'Fantasma', value: 'ghost'},
-					{name: 'Hielo', value: 'ice'},
-					{name: 'Dragón', value: 'dragon'},
-					{name: 'Oscuro', value: 'dark'},
-					{name: 'Hierro', value: 'steel'},
-					{name: 'Volador', value: 'flying'}],
-
-			//Tipo secundario
-			selectedTypeSecondary:'all',
-			secondaryTypes: [{name: 'Todos', value: 'all'},
-					{name: 'Planta', value: 'grass'},
-					{name: 'Fuego', value: 'fire'},
-					{name: 'Agua', value: 'water'},
-					{name: 'Bicho siuuuu', value: 'bug'},
-					{name: 'Normal', value: 'normal'},
-					{name: 'Veneno', value: 'poison'},
-					{name: 'Eléctrico', value: 'electric'},
-					{name: 'Tierra', value: 'ground'},
-					{name: 'Hada', value: 'fairy'},
-					{name: 'Lucha', value: 'fighting'},
-					{name: 'Psiquico', value: 'psychic'},
-					{name: 'Roca', value: 'rock'},
-					{name: 'Fantasma', value: 'ghost'},
-					{name: 'Hielo', value: 'ice'},
-					{name: 'Dragón', value: 'dragon'},
-					{name: 'Oscuro', value: 'dark'},
-					{name: 'Hierro', value: 'steel'},
-					{name: 'Volador', value: 'flying'}],
+			//Tipos
+			selectedType:'all',
+			types: [{name: 'Todos', value: 'all'}],
 
 			//Regiónes
 			selectedRegion: 'all',
@@ -245,7 +186,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters('region', ['getRegions', 'getRegion'])
+		...mapGetters('region', ['getRegions', 'getRegion']),
+		...mapGetters('type', ['getTypes', 'getType'])
 	},
 	watch: {
 		$route: function(){
@@ -284,8 +226,17 @@ export default {
 			await this.$store.dispatch('region/fetchRegions')
 		}
 
+		if( this.getTypes.length === 0) {
+
+			await this.$store.dispatch('type/fetchTypes')
+
+		}
 		for(const region of this.getRegions){
 			this.regions.push({name: region.name, value: region.name})
+		}
+
+		for(const type of this.getTypes){
+			this.types.push({name: type.name, value: type.name})
 		}
 
 		this.restartData();
@@ -293,15 +244,10 @@ export default {
 	methods: {
 
 		restartData(){
-			if(this.$route.query.typeone === undefined)
-				this.selectedTypePrimary = 'all'
+			if(this.$route.query.type === undefined)
+				this.selectedType = 'all'
 			else
-				this.selectedTypePrimary = this.$route.query.typeone
-
-			if(this.$route.query.typetwo === undefined)
-				this.selectedTypeSecondary = 'all'
-			else
-				this.selectedTypeSecondary = this.$route.query.typetwo
+				this.selectedType = this.$route.query.type
 
 			if(this.$route.query.region === undefined)
 				this.selectedRegion = 'all'
@@ -327,20 +273,6 @@ export default {
 		closeDialog(){
 			this.restartData();
 			this.$router.back();
-		},
-
-		applyFilter(){
-			this.$router.push({hash:'',
-				query:{
-					typeone:this.selectedTypePrimary,
-					typetwo:this.selectedTypeSecondary,
-					region:this.selectedRegion,
-					pokedex:this.selectedPokedex,
-					groupby:this.selectedGroupBy,
-					order:this.selectedOrder,
-					page:this.$route.query.page
-				}	
-			})
 		}
 	}
 }

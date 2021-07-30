@@ -20,7 +20,7 @@ const actions = {
 	async fetchTypes({ commit }) {
 		try {
 			const response = await getAllTypes();
-			commit('SET_TYPES', response.data);
+			commit('SET_TYPES', response.data.results);
 		} catch (error) {
 			console.log(error);
 		}
