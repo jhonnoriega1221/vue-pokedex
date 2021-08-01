@@ -20,12 +20,6 @@
             </v-btn>
         </div>
 
-        <div>
-            <label>Filtros: </label>
-
-
-        </div>
-
         <!--Filter FAB button (Mobile)-->
         <v-btn
         fab
@@ -50,8 +44,10 @@
                 v-bind:key="i">
 
                     <!--Pokemon card-->
-                    <div v-if="pokemonSpeciesURLList">
-                        <Pokecard v-bind:pokemonSpecieURL="pokemonSpeciesURLList[i]"/>
+                    <div v-if="pokemonsPagination.length > 0">
+                        <Pokecard 
+                            :pokemonCardData = "pokemonsPagination[i]"
+                        />
                     </div>
 
                     <!--Pokemon card skeleton loader-->
@@ -113,7 +109,10 @@ export default {
     },
     computed: {
         ...mapGetters('pokedex', ['getPokedexes', 'getPokedex']),
-        ...mapGetters('type', ['getTypes', 'getType'])
+        ...mapGetters('type', ['getTypes', 'getType']),
+        ...mapGetters('pokemonSpecie', ['getPokemonSpecies', 'getPokemonSpecie']),
+        ...mapGetters('pokemon', ['getPokemons', 'getPokemon'])
+
     },
     async mounted() {
         if( this.getPokedexes.length === 0 ) {
@@ -130,26 +129,40 @@ export default {
 
         }
 
+        if( this.getPokemonSpecies.length === 0 ) {
+                //loadingScreen
+                this.isLoading = true;                       
+                await this.$store.dispatch('pokemonSpecie/fetchPokemonSpecies')
+
+                this.isLoading = false;
+            }
+
+        //if que valida que hayan datos en el store de pokemons
+        if( this.getPokemons.length === 0 ) {
+            //loadingScreen
+            this.isLoading = true;                       
+            await this.$store.dispatch('pokemon/fetchPokemons')
+
+            this.isLoading = false;
+        }
+
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
         this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API (DEPRECATED)
-        this.getPokemonSpecies(); //METODO QUE ME OBTIENE LOS POKIMONS (NUEVO)
+        this.getPokemonList(); //METODO QUE ME OBTIENE LOS POKIMONS (NUEVO)
     },
-    watch: {/*
+    watch: {
         $route (newVal, oldVal) { //Actualiza la lista de pokemons al cambiar la ruta
             if( oldVal.hash == newVal.hash ) {
                 this.setPagination();
-                this.pokemonSpeciesURLList=''
-                window.scrollTo(0,0)
-                this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage)
+                window.scrollTo(0,0);
+                this.setPokemonPagination();
             }
-        }*/
+        }
     },
     methods: {
 
         //Verifica si está activado algún filtro
-        async getPokemonSpecies(){
-            if(this.pokemons.length > 0)
-                this.pokemons = [];
+        async getPokemonList(){
 
             if(
             (this.$route.query.pokedex === 'national' || this.$route.query.pokedex === undefined) && 
@@ -161,29 +174,75 @@ export default {
                     await this.$store.dispatch('pokedex/fetchPokedex', 'national');
                     //Pendiente colocar loading
                 }
-                this.pokemons = this.getPokedex('national').url.pokemon_entries;
-            } else 
-                //Filtra la pokedex de acuerdo a los filtros colocados
-                await this.filterPokedex();
 
+                this.pokemons = this.getPokedex('national').url.pokemon_entries;
+            } else
+                //Filtra la pokedex de acuerdo a los filtros colocados
+                this.pokemons = await this.filterPokedex();
             this.paginationLimit = Math.round(this.pokemons.length / this.apiLimit)
-            this.setPokemonPagination();
+            await this.setPokemonPagination();
 
         },
 
-        setPokemonPagination(){
-            if(this.pokemonsPagination.length > 0)
-                this.pokemonsPagination = []
+        async setPokemonPagination(){
+            let pokemonsPaginationTemporal = [];
+            this.pokemonsPagination = []
             
-            for(let i = this.apiOffset; i < (this.apiOffset + this.apiLimit); i++)
-                this.pokemonsPagination.push(this.pokemons[i])
+            //For que inserta los pokemones de la lista general al paginador
+            for(let i = this.apiOffset; i < (this.apiOffset + this.apiLimit); i++){
+                if(this.pokemons[i])
+                    pokemonsPaginationTemporal.push(this.pokemons[i])
+            }
 
-            console.log(this.pokemonsPagination)
+            //For que agrega los datos al paginador
+       
+             for( const [i, pokemonPagination] of pokemonsPaginationTemporal.entries()){
+                //Si en el store aun no están disponibles los datos de un pokemonSpecie en especifco
+                if(typeof(this.getPokemonSpecie(pokemonPagination.pokemon_species.name).url) === 'string' )
+                    await this.$store.dispatch('pokemonSpecie/fetchPokemonSpecie', pokemonPagination.pokemon_species.name);
+                
+                //Agrega los datos de pokemonSpecie a la paginacion de pokemons
+                pokemonsPaginationTemporal[i].pokemon_species.url = this.getPokemonSpecie(pokemonPagination.pokemon_species.name).url;
+            
+
+                if(typeof(this.getPokemon(pokemonPagination.pokemon_species.url.varieties[0].pokemon.name).url) === 'string' )
+                    await this.$store.dispatch('pokemon/fetchPokemon', pokemonPagination.pokemon_species.url.varieties[0].pokemon.name);
+                
+                //Agrega los datos de pokemonSpecie a la paginacion de pokemons
+                pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url = this.getPokemon(pokemonPagination.pokemon_species.url.varieties[0].pokemon.name).url;
+                
+                if(pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.types.length > 1){
+                    this.pokemonsPagination.push(
+                        {
+                            pokemonName: pokemonsPaginationTemporal[i].pokemon_species.name,
+                            pokemonEntry: pokemonsPaginationTemporal[i].entry_number,
+                            pokemonTypePrimary: pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.types[0].type.name,
+                            pokemonTypeSecondary: pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.types[1].type.name,
+                            pokemonArtwork: pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.sprites.other["official-artwork"].front_default
+                        }
+                    )
+                }
+                else{
+                    this.pokemonsPagination.push(
+                        {
+                            pokemonName: pokemonsPaginationTemporal[i].pokemon_species.name,
+                            pokemonEntry: pokemonsPaginationTemporal[i].entry_number,
+                            pokemonTypePrimary: pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.types[0].type.name,
+                            pokemonArtwork: pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.sprites.other["official-artwork"].front_default
+                        }
+                    )
+                }
+                
+                
+            }
+
+            //console.log(this.pokemonsPagination)
         },
 
         async filterPokedex() {
 
             let pokedexList;
+            let filterPokemonListTemporal = [];
             //Obtiene la pokedex de turno
             if(this.$route.query.pokedex === 'national' ||
             this.$route.query.pokedex === undefined){
@@ -208,7 +267,7 @@ export default {
             {
 
                 //Lógica para filtrar la pokedex
-                this.pokemons = pokedexList;
+                return(pokedexList);
 
             } else {//Si tambien se filtraron los tipos 
                 let typeList = [];
@@ -231,9 +290,10 @@ export default {
 
                     const typeIsInPokedex = (pokemon) => pokemon === pokemonName
                     if(pokedexNameList.includes(pokemonName)){
-                        this.pokemons.push(pokedexList[pokedexNameList.findIndex(typeIsInPokedex)])
+                        filterPokemonListTemporal.push(pokedexList[pokedexNameList.findIndex(typeIsInPokedex)])
                     }
                 }
+                return(filterPokemonListTemporal);
             }
         },
 
@@ -263,7 +323,7 @@ export default {
 
         },
 
-        nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
+        async nextPage(page) { //Cambia la query de la ruta al cambiar de valor en el paginador
             this.$router.push({
                     name:'Pokedex',
                     query:{
@@ -275,9 +335,6 @@ export default {
                         page:parseInt(page)
                 }
             })
-            this.setPagination();
-            this.setPokemonPagination();
-
         },
 
         showFilterDialog(){
@@ -306,7 +363,7 @@ export default {
                 }
             });
             this.setPagination();
-            this.getPokemonSpecies();
+            this.pokemons = this.getPokemonList();
 
         }
     }
