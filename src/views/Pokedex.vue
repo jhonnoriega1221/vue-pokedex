@@ -100,7 +100,6 @@ export default {
             pokemons: [],
             pokemonsPagination: [],
             isLoading: false,
-            pokemonSpeciesURLList: '', //Lista de las especies de pokemon obtenidas de la API (DEPRECATED)
             apiLimit: 12, //Limite de consulta de la API
             apiOffset: 0, //Offset de la consulta de la API
             paginationPage: 0, //Posición del paginador
@@ -117,16 +116,10 @@ export default {
     async mounted() {
         if( this.getPokedexes.length === 0 ) {
             //loadingScreen
-            this.isLoading = true;                       
+            this.isLoading = true;
             await this.$store.dispatch('pokedex/fetchPokedexes')
 
             this.isLoading = false;
-        }
-
-        if( this.getTypes.length === 0) {
-
-            await this.$store.dispatch('type/fetchTypes')
-
         }
 
         if( this.getPokemonSpecies.length === 0 ) {
@@ -147,7 +140,6 @@ export default {
         }
 
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
-        this.getPokemonSpeciesURLs(this.apiLimit, this.paginationPage) //Metodo que obtiene los datos de la API (DEPRECATED)
         this.getPokemonList(); //METODO QUE ME OBTIENE LOS POKIMONS (NUEVO)
     },
     watch: {
@@ -155,7 +147,7 @@ export default {
             if( oldVal.hash == newVal.hash ) {
                 this.setPagination();
                 window.scrollTo(0,0);
-                this.setPokemonPagination();
+                this.getPokemonList();
             }
         }
     },
@@ -295,21 +287,6 @@ export default {
                 }
                 return(filterPokemonListTemporal);
             }
-        },
-
-        async getPokemonSpeciesURLs(limit, page){ //Obtiene los datos de la API
-            this.apiOffset = limit * (page-1) //Calcula el offset de acuerdo al limite de valores establecidos y la pagina solicitada
-
-            
-            await axios.get(`https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${this.apiOffset}`).then(
-                res => {
-                    this.pokemonSpeciesURLList = res.data.results
-                }
-            ).catch(
-                err => {
-                    console.log(err);
-                }
-            )
         },
 
         setPagination(){ //Determina que valor debe tener la query "page"
