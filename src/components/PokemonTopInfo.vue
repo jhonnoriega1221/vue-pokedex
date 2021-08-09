@@ -1,42 +1,44 @@
 <template>
-    <div class="pokemon-top-info" v-if="pokemonSpecie && pokemonVarieties.length">
+    <div class="pokemon-top-info" v-if="pokemonData.pokemonVarieties">
         <!--Pokeball background
         <img  class="pokeball-bg" src="../assets/pokeball.svg" alt=""-->
 
         <!--Pokemon name and number-->
         <v-row>
             <v-col cols=6 class="pb-0">
-                <h1 class="text-capitalize white--text">{{pokemonSpecie.name}}</h1>
+                <h1 class="text-capitalize white--text">{{pokemonData.pokemonSpecieName}}</h1>
             </v-col>
             <v-col cols=6 class="pb-0">
-                <h4 class="white--text font-weight-bold text-right">#{{pokemonSpecie.pokedex_numbers[0].entry_number}}</h4>
+                <h4 class="white--text font-weight-bold text-right">#{{pokemonData.pokedexNumber}}</h4>
             </v-col>
         </v-row>
         
         <!--Pokemon types and genera-->
-        <v-row>
+        <v-row >
             <!--v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" dark style="height:25px"  class="mr-2 text-center text-capitalize" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip-->
-            <v-col class="py-0" cols=7>
-                <v-chip v-for="type in pokemonVarieties[selectedForm].types" v-bind:key="type.id" dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip>
+            <v-col v-if="pokemonData.pokemonVarieties[selectedForm]" class="py-0" cols=7>
+                <v-chip dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieFirstType}}</v-chip>
+                <v-chip dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieSecondType}}</v-chip>
             </v-col>
 
             <v-col cols=5 class="py-0">
-                <h6 class="white--text font-weight-light text-right py-1">{{pokemonSpecie.genera[5].genus}}</h6>
+                <h6 class="white--text font-weight-light text-right py-1">{{pokemonData.pokemonGenera}}</h6>
             </v-col>
         </v-row>
 
         <!--Pokemon artwork-->
         <v-img 
+        v-if="pokemonData.pokemonVarieties[selectedForm]"
         transition=none
         contain
         height="300px"
-        v-bind:src='pokemonVarieties[selectedForm].sprites.other["official-artwork"].front_default'
+        v-bind:src='pokemonData.pokemonVarieties[selectedForm].pokemonVarietieArtwork'
         ></v-img>
 
         <!--Pokemon forms-->
-        <v-row v-if="pokemonVarieties.length > 1">
+        <v-row v-if="pokemonData.pokemonVarieties.length > 1">
             <v-col cols=12 class="pt-0">
-                <h5 class="text-center white--text font-weight-normal">{{pokemonVarieties[selectedForm].name}}</h5>
+                <h5 class="text-center white--text font-weight-normal">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieName}}</h5>
             </v-col>
             <div
             class="mx-auto pb-7"
@@ -51,13 +53,13 @@
                     icon
                     large
                     tile
-                    v-for="pokemonVarietie in pokemonVarieties"
+                    v-for="pokemonVarietie in pokemonData.pokemonVarieties"
                     v-bind:key="pokemonVarietie.id"
                     >
                         <v-img
                         transition=none
                         width="44"
-                        v-bind:src='pokemonVarietie.sprites.other["official-artwork"].front_default'
+                        v-bind:src='pokemonVarietie.pokemonVarietieArtwork'
                         >
                         </v-img>
                     </v-btn>
@@ -76,8 +78,7 @@
 export default {
     name: 'PokemonTopInfo',
     props: {
-        pokemonSpecie: Object,
-        pokemonVarieties: Array,
+        pokemonData: Object
     },
     data: () => {
         return{

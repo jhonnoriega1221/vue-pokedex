@@ -20,26 +20,17 @@ const actions = {
 	async fetchTypes({ commit }) {
 		try {
 			const response = await getAllTypes();
-			commit('SET_TYPES', response.data.results);
+			//commit('SET_TYPES', response.data.results);
+			return response.data;
 		} catch (error) {
 			console.log(error);
 		}
 	},
 
 	async fetchType({ state, commit }, value) {
-		let positionEdit = 0;
-
-		//MODIFICAR ESTE FOR con FIND
-		for(const [i, type] of state.types.entries()) {
-			if(type.name === value) {
-				positionEdit = i
-				break;
-			}
-		}
-
 		try {
 			const response = await getType(value);
-			commit('SET_TYPE', {response, positionEdit});
+			return response.data;
 		} catch (error) {
 			console.log(error);
 		}

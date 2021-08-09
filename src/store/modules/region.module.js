@@ -20,27 +20,17 @@ const actions = {
 	async fetchRegions({ commit }) {
 		try {
 			const response = await getAllRegions();
-			commit('SET_REGIONS', response.data.results);
+			//commit('SET_REGIONS', response.data.results);
+			return response.data
 		} catch (error) {
 			console.log(error);
 		}
 	},
 
 	async fetchRegion({state, commit}, value) {
-		let positionEdit = 0;
-
-		//MODIFICAR ESTE FOR con FIND
-		for(const [i, region] of state.regions.entries()){
-			if(region.name === value){
-				positionEdit = i
-
-				break;
-			}
-		}
-
 		try {
 			const response = await getRegion(value);
-			commit('SET_REGION', {response, positionEdit});
+			return response.data;
 		} catch (error) {
 			console.log(error);
 		}

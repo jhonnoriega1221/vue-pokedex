@@ -23,7 +23,7 @@
 				<br>
 			</v-card-text>
 			<v-card-text class="text-right">
-				v0.1 | 2021
+				v0.2 | 2021
 			</v-card-text>
 
 			<v-divider></v-divider>

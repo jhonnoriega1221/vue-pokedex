@@ -140,7 +140,7 @@
 				</v-btn>
 				<v-btn
 					color="primary"
-					
+					:disabled = isLoadingPokedexes
 					v-on:click="$emit('applyFilter', selectedType, selectedRegion, selectedPokedex, selectedOrder, selectedGroupBy)" 
 
 				>
@@ -205,37 +205,28 @@ export default {
 					this.pokedexes = [{name: 'Nacional', value: 'national'}]
 					this.selectedPokedex = this.pokedexes[0].value
 				} else {
-					if(typeof(this.getRegion(newValue).url) === 'string'){
-						this.isLoadingPokedexes = true;
-						await this.$store.dispatch('region/fetchRegion', newValue);
-						this.isLoadingPokedexes = false;
-					}
+					this.isLoadingPokedexes = true;
+					const regionsResponse = await this.$store.dispatch('region/fetchRegion', newValue);
+					this.isLoadingPokedexes = false;
 					this.pokedexes=[];
-					for(const pokedexes of this.getRegion(newValue).url.pokedexes){
+					for(const pokedexes of regionsResponse.pokedexes){
 						this.pokedexes.push(pokedexes.name)
 					}
 					this.selectedPokedex = this.pokedexes[0]
-
 				}
 			}
 		}
 	},
 	async mounted(){
 
-		if( this.getRegions.length === 0)  {
-			await this.$store.dispatch('region/fetchRegions')
-		}
+		const typesResponse = await this.$store.dispatch('type/fetchTypes')
+		const regionsResponse = await this.$store.dispatch('region/fetchRegions')
 
-		if( this.getTypes.length === 0) {
-
-			await this.$store.dispatch('type/fetchTypes')
-
-		}
-		for(const region of this.getRegions){
+		for(const region of regionsResponse.results){
 			this.regions.push({name: region.name, value: region.name})
 		}
 
-		for(const type of this.getTypes){
+		for(const type of typesResponse.results){
 			this.types.push({name: type.name, value: type.name})
 		}
 

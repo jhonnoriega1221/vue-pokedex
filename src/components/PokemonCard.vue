@@ -27,7 +27,7 @@
                     <v-chip style="height:25px" class="text-capitalize mb-1 d-block text-center text-caption" color="rgba(255, 255, 255, 0.2)">
                         {{pokemonCardData.pokemonTypePrimary}}
                     </v-chip>
-                    <v-chip style="height:25px" class="text-capitalize mb-1 d-block text-center text-caption" color="rgba(255, 255, 255, 0.2)">
+                    <v-chip v-if=pokemonCardData.pokemonTypeSecondary style="height:25px" class="text-capitalize mb-1 d-block text-center text-caption" color="rgba(255, 255, 255, 0.2)">
                         {{pokemonCardData.pokemonTypeSecondary}}
                     </v-chip>
 

@@ -84,11 +84,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import Pokecard from '@/components/PokemonCard.vue'
 import FilterForm from '@/components/FilterForm.vue'
-
-import axios from 'axios';
 
 export default {
     components: {
@@ -107,38 +104,9 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('pokedex', ['getPokedexes', 'getPokedex']),
-        ...mapGetters('type', ['getTypes', 'getType']),
-        ...mapGetters('pokemonSpecie', ['getPokemonSpecies', 'getPokemonSpecie']),
-        ...mapGetters('pokemon', ['getPokemons', 'getPokemon'])
 
     },
     async mounted() {
-        if( this.getPokedexes.length === 0 ) {
-            //loadingScreen
-            this.isLoading = true;
-            await this.$store.dispatch('pokedex/fetchPokedexes')
-
-            this.isLoading = false;
-        }
-
-        if( this.getPokemonSpecies.length === 0 ) {
-                //loadingScreen
-                this.isLoading = true;                       
-                await this.$store.dispatch('pokemonSpecie/fetchPokemonSpecies')
-
-                this.isLoading = false;
-            }
-
-        //if que valida que hayan datos en el store de pokemons
-        if( this.getPokemons.length === 0 ) {
-            //loadingScreen
-            this.isLoading = true;                       
-            await this.$store.dispatch('pokemon/fetchPokemons')
-
-            this.isLoading = false;
-        }
-
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
         this.getPokemonList(); //METODO QUE ME OBTIENE LOS POKIMONS (NUEVO)
     },
@@ -155,30 +123,27 @@ export default {
 
         //Verifica si está activado algún filtro
         async getPokemonList(){
+            if(this.pokemons.length === 0) { //Si la variable pokemons está vacia
+                if( //Si no se ha seleccionado ningun filtro
+                (this.$route.query.pokedex === 'national' || this.$route.query.pokedex === undefined) && 
+                (this.$route.query.type === 'all' || this.$route.query.type === undefined)
+                ){
+                    //Obtiene los pokemons de la pokedex nacional
+                    const response = await this.$store.dispatch('pokedex/fetchPokedex', 'national');
+                    this.pokemons = response.pokemon_entries;
+                } else //Si hay filtros activados
+                    //Filtra la pokedex de acuerdo a los filtros colocados
+                    this.pokemons = await this.filterPokedex();
+            }
 
-            if(
-            (this.$route.query.pokedex === 'national' || this.$route.query.pokedex === undefined) && 
-            (this.$route.query.type === 'all' || this.$route.query.type === undefined)
-            ){
-                //Si No hay ningún filtro activado entonces obtiene la lista de pokemons en la pokedex nacional
-                if(typeof(this.getPokedex('national').url) === 'string') {
-                    //Pendiente colocar loading
-                    await this.$store.dispatch('pokedex/fetchPokedex', 'national');
-                    //Pendiente colocar loading
-                }
-
-                this.pokemons = this.getPokedex('national').url.pokemon_entries;
-            } else
-                //Filtra la pokedex de acuerdo a los filtros colocados
-                this.pokemons = await this.filterPokedex();
-            this.paginationLimit = Math.round(this.pokemons.length / this.apiLimit)
-            await this.setPokemonPagination();
+            this.paginationLimit = Math.round(this.pokemons.length / this.apiLimit)//Se calcula la cantidad de paginas del paginador
+            await this.setPokemonPagination(); //Se dividen los pokemons por pagina
 
         },
 
         async setPokemonPagination(){
             let pokemonsPaginationTemporal = [];
-            this.pokemonsPagination = []
+            this.pokemonsPagination = [] //Vacia la variable de la paginacion de pokemons
             
             //For que inserta los pokemones de la lista general al paginador
             for(let i = this.apiOffset; i < (this.apiOffset + this.apiLimit); i++){
@@ -186,22 +151,17 @@ export default {
                     pokemonsPaginationTemporal.push(this.pokemons[i])
             }
 
+
             //For que agrega los datos al paginador
        
              for( const [i, pokemonPagination] of pokemonsPaginationTemporal.entries()){
-                //Si en el store aun no están disponibles los datos de un pokemonSpecie en especifco
-                if(typeof(this.getPokemonSpecie(pokemonPagination.pokemon_species.name).url) === 'string' )
-                    await this.$store.dispatch('pokemonSpecie/fetchPokemonSpecie', pokemonPagination.pokemon_species.name);
+                const pokemonSpecieResponse = await this.$store.dispatch('pokemonSpecie/fetchPokemonSpecie', pokemonPagination.pokemon_species.name);
+                pokemonsPaginationTemporal[i].pokemon_species.url = pokemonSpecieResponse;
+                
+                const pokemonResponse = await this.$store.dispatch('pokemon/fetchPokemon', pokemonPagination.pokemon_species.url.varieties[0].pokemon.name);
                 
                 //Agrega los datos de pokemonSpecie a la paginacion de pokemons
-                pokemonsPaginationTemporal[i].pokemon_species.url = this.getPokemonSpecie(pokemonPagination.pokemon_species.name).url;
-            
-
-                if(typeof(this.getPokemon(pokemonPagination.pokemon_species.url.varieties[0].pokemon.name).url) === 'string' )
-                    await this.$store.dispatch('pokemon/fetchPokemon', pokemonPagination.pokemon_species.url.varieties[0].pokemon.name);
-                
-                //Agrega los datos de pokemonSpecie a la paginacion de pokemons
-                pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url = this.getPokemon(pokemonPagination.pokemon_species.url.varieties[0].pokemon.name).url;
+                pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url = pokemonResponse;
                 
                 if(pokemonsPaginationTemporal[i].pokemon_species.url.varieties[0].pokemon.url.types.length > 1){
                     this.pokemonsPagination.push(
@@ -233,59 +193,49 @@ export default {
 
         async filterPokedex() {
 
-            let pokedexList;
-            let filterPokemonListTemporal = [];
-            //Obtiene la pokedex de turno
-            if(this.$route.query.pokedex === 'national' ||
-            this.$route.query.pokedex === undefined){
-                if(typeof(this.getPokedex('national').url) === 'string') {
-                    //Pendiente colocar loading0
-                    await this.$store.dispatch('pokedex/fetchPokedex', 'national');
-                    //Pendiente colocar loading
-                }
-                pokedexList = this.getPokedex('national').url.pokemon_entries
-            } else {
-                if(typeof(this.getPokedex(this.$route.query.pokedex).url) === 'string') {
-                    //Pendiente colocar loading
-                    await this.$store.dispatch('pokedex/fetchPokedex', this.$route.query.pokedex);
-                    //Pendiente colocar loading
-                }
-                pokedexList = this.getPokedex(this.$route.query.pokedex).url.pokemon_entries
-            }
+            let pokedexPokemons; //Variable que almacena los pokemons de la pokedex seleccionada
+            let filterPokedexPokemonsTemporal = []; //Variable que almacena los pokemons filtrados temporalmente
 
+            //Obtiene la pokedex solicitad
+            if(this.$route.query.pokedex === 'national' ||
+            this.$route.query.pokedex === undefined){ //Si la pokedex es nacional
+                pokedexPokemons = await this.$store.dispatch('pokedex/fetchPokedex', 'national');
+            } else { //Si la pokedex es otra
+                pokedexPokemons = await this.$store.dispatch('pokedex/fetchPokedex', this.$route.query.pokedex);
+            }
 
             if //Si solo se filtró la pokedex
             (this.$route.query.type === 'all' || this.$route.query.type === undefined)
             {
 
                 //Lógica para filtrar la pokedex
-                return(pokedexList);
+                return(pokedexPokemons.pokemon_entries);
 
             } else {//Si tambien se filtraron los tipos 
-                let typeList = [];
-                let pokedexNameList = [];
+                let pokemonsNamesTypeList = []; //Variable que almacena los nombres de los pokemons de un tipo
+                let pokemonsNamesPokedexList = []; //Variable que me almacena los nombres de los pokemons de una pokedex
 
-                if(typeof(this.getType(this.$route.query.type).url) === 'string')
-                    await this.$store.dispatch('type/fetchType', this.$route.query.type);
+                const pokemonsTypeList = await this.$store.dispatch('type/fetchType', this.$route.query.type);
 
-                for(const typePokemonName of this.getType(this.$route.query.type).url.pokemon){
-                    typeList.push(typePokemonName.pokemon.name)
+                for(const typePokemonName of pokemonsTypeList.pokemon){
+                    pokemonsNamesTypeList.push(typePokemonName.pokemon.name)
                 }
 
-                for(const pokedexPokemonName of pokedexList){
-                    pokedexNameList.push(pokedexPokemonName.pokemon_species.name)
+                for(const pokedexPokemonName of pokedexPokemons.pokemon_entries){
+                    pokemonsNamesPokedexList.push(pokedexPokemonName.pokemon_species.name)
                 }
 
-                //Se compara typeList con pokedexList y los pokemones que coincidan se agregan a pokemons
-
-                for(const pokemonName of typeList){
+                //Se compara pokemonsNamesTypeList con pokedexPokemons y los pokemones que coincidan se agregan a pokemons
+                for(const pokemonName of pokemonsNamesTypeList){
 
                     const typeIsInPokedex = (pokemon) => pokemon === pokemonName
-                    if(pokedexNameList.includes(pokemonName)){
-                        filterPokemonListTemporal.push(pokedexList[pokedexNameList.findIndex(typeIsInPokedex)])
+
+                    if(pokemonsNamesPokedexList.includes(pokemonName)){
+                        filterPokedexPokemonsTemporal.push(pokedexPokemons.pokemon_entries[pokemonsNamesPokedexList.findIndex(typeIsInPokedex)])
                     }
                 }
-                return(filterPokemonListTemporal);
+                console.log(filterPokedexPokemonsTemporal)
+                return(filterPokedexPokemonsTemporal);
             }
         },
 
@@ -328,7 +278,7 @@ export default {
             })
         },
 
-        applyFilter(selectedType, selectedRegion, selectedPokedex, selectedOrder, selectedGroupBy){
+        async applyFilter(selectedType, selectedRegion, selectedPokedex, selectedOrder, selectedGroupBy){
             this.$router.push({hash:'',
                 query:{
                     type:selectedType,
@@ -340,7 +290,8 @@ export default {
                 }
             });
             this.setPagination();
-            this.pokemons = this.getPokemonList();
+            this.pokemons = [];
+            await this.getPokemonList();
 
         }
     }

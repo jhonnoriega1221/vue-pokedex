@@ -27,17 +27,9 @@ const actions = {
 	},
 
 	async fetchPokemonSpecie({ state, commit }, pokemonSpecieName) {
-		let positionEdit = 0;
-		for(const [i, pokemonSpecies] of state.pokemonSpecies.entries()){
-			if(pokemonSpecies.name === pokemonSpecieName){
-				positionEdit = i;
-				break;
-			}
-		}
-
 		try{
 			const response = await getPokemonSpecie(pokemonSpecieName);
-			commit('SET_POKEMON_SPECIE', {response, positionEdit});
+			return response.data
 		} catch (error) {
 			console.log(error);
 		}

@@ -9,10 +9,6 @@ const state = {
 const getters = {
 	getPokedexes(state) {
 		return state.pokedexes;
-	},
-
-	getPokedex: (state) => (id) => {
-		return state.pokedexes.find(pokedex => pokedex.name === id);
 	}
 };
 
@@ -27,20 +23,14 @@ const actions = {
 	},
 
 	async fetchPokedex({ state, commit }, pokedexName) {
-		let positionEdit = 0;
-		for(const [i, pokedexes] of state.pokedexes.entries()){
-			if(pokedexes.name === pokedexName){
-				positionEdit = i;
-				break;
-			}
-		}
-
+		
 		try{
 			const response = await getPokedex(pokedexName);
-			commit('SET_POKEDEX', {response, positionEdit});
+			return response.data;
 		} catch (error) {
 			console.log(error);
 		}
+		
 	}
 };
 
