@@ -14,10 +14,22 @@ export default new Vuex.Store({
 
 
   state: {
+    mainBackground: ''
   },
   mutations: {
+    SET_MAIN_BACKGROUND (state, data){
+      state.mainBackground = data;
+    }
   },
   actions: {
+    setMainBackground ({commit}, value) { 
+      commit('SET_MAIN_BACKGROUND', value)
+    }
+  },
+  getters: {
+    getMainBackground(state) {
+      return state.mainBackground;
+    }
   },
   modules: {
     pokemonSpecie:pokemonSpecieStore,

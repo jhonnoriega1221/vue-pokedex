@@ -7,7 +7,7 @@
                 <v-tab>Evolución</v-tab>
 
                                 <!--Acerca de-->
-                <v-tab-item v-if="pokemonData.pokemonVarieties[selectedForm]">
+                <v-tab-item class="pb-10" v-if="pokemonData.pokemonVarieties[selectedForm]">
                     <v-card flat>
                         <v-card-text>
                             <p class="black--text">
@@ -72,7 +72,7 @@
                 </v-tab-item>
 
                 <!--Estadisticas base-->
-                <v-tab-item v-if="pokemonData.pokemonVarieties[selectedForm]">
+                <v-tab-item class="pb-10" v-if="pokemonData.pokemonVarieties[selectedForm]">
                     <v-card flat>
                         <v-card-text >
                             <h3 class="black--text pb-7">Estadisticas Base</h3>
@@ -95,7 +95,7 @@
                 </v-tab-item>
 
                 <!--Cadena evolutiva-->
-                <v-tab-item>
+                <v-tab-item class="pb-10">
                     <v-card flat>
                         <v-card-text v-if="pokemonData.evolutionChain.evolvesTo.length > 0">
                             <h3 class="black--text pb-7">Cadena evolutiva</h3>
@@ -183,8 +183,8 @@
         </v-card>
     </div>
     <div v-else>
-        <v-skeleton-loader type ="image@2" style="background:white">
-        </v-skeleton-loader>
+        <v-skeleton-loader class="mt-0 mt-md-5" height="260" type ="image@2" style="background:white">
+                    </v-skeleton-loader>
     </div>
 </template>
 

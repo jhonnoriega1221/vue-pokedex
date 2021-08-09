@@ -234,7 +234,7 @@ export default {
                         filterPokedexPokemonsTemporal.push(pokedexPokemons.pokemon_entries[pokemonsNamesPokedexList.findIndex(typeIsInPokedex)])
                     }
                 }
-                console.log(filterPokedexPokemonsTemporal)
+                //console.log(filterPokedexPokemonsTemporal)
                 return(filterPokedexPokemonsTemporal);
             }
         },
@@ -289,6 +289,7 @@ export default {
                     page:1
                 }
             });
+            window.scrollTo(0,0);
             this.setPagination();
             this.pokemons = [];
             await this.getPokemonList();

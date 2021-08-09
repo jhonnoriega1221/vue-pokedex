@@ -18,7 +18,7 @@
             <!--v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" dark style="height:25px"  class="mr-2 text-center text-capitalize" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip-->
             <v-col v-if="pokemonData.pokemonVarieties[selectedForm]" class="py-0" cols=7>
                 <v-chip dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieFirstType}}</v-chip>
-                <v-chip dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieSecondType}}</v-chip>
+                <v-chip v-if="pokemonData.pokemonVarieties[selectedForm].pokemonVarietieSecondType" dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieSecondType}}</v-chip>
             </v-col>
 
             <v-col cols=5 class="py-0">
@@ -27,13 +27,15 @@
         </v-row>
 
         <!--Pokemon artwork-->
-        <v-img 
-        v-if="pokemonData.pokemonVarieties[selectedForm]"
-        transition=none
-        contain
-        height="300px"
-        v-bind:src='pokemonData.pokemonVarieties[selectedForm].pokemonVarietieArtwork'
-        ></v-img>
+        <div style="min-height:300px;">
+            <v-img 
+            v-if="pokemonData.pokemonVarieties[selectedForm]"
+            transition=none
+            contain
+            height="300px"
+            v-bind:src='pokemonData.pokemonVarieties[selectedForm].pokemonVarietieArtwork'
+            ></v-img>
+        </div>
 
         <!--Pokemon forms-->
         <v-row v-if="pokemonData.pokemonVarieties.length > 1">
@@ -70,7 +72,12 @@
 
     </div>
     <div v-else>
-        <p>No ha carga2</p>
+            <v-skeleton-loader  type="heading" class="mt-3"></v-skeleton-loader>
+                    <v-skeleton-loader type="text" class="mt-2" width="50"></v-skeleton-loader>
+                    <v-skeleton-loader type="text" class="mt-n5 float-right" height="40" width="60"></v-skeleton-loader>
+                    <v-skeleton-loader type="image" class="mt-6" height="270" ></v-skeleton-loader>
+        
+            
     </div>
 </template>
 

@@ -54,6 +54,7 @@ export default {
 
         window.scrollTo(0,0);
         await this.fetchPokemonSpecieData();
+        this.$store.dispatch('setMainBackground', this.pokemonSpecieData.pokemonVarieties[0].pokemonVarietieFirstType);
     },
     watch: {
         $route: function(newVal, oldVal){
@@ -114,12 +115,12 @@ export default {
                     pokemonVarietieWeight: pokemonVarietieResponse.weight,
                     pokemonVarietieHeight: pokemonVarietieResponse.height,
                     pokemonVarietieStats: [
-                        {name: 'HP', value: pokemonVarietieResponse.stats[0].base_stat},
-                        {name: 'Attack', value: pokemonVarietieResponse.stats[1].base_stat},
-                        {name: 'Defense', value: pokemonVarietieResponse.stats[2].base_stat},
-                        {name: 'SpecialAtk', value: pokemonVarietieResponse.stats[3].base_stat},
-                        {name: 'SpecialDfn', value: pokemonVarietieResponse.stats[4].base_stat},
-                        {name: 'Agility', value: pokemonVarietieResponse.stats[5].base_stat}
+                        {name: 'PS', value: pokemonVarietieResponse.stats[0].base_stat},
+                        {name: 'Ataque', value: pokemonVarietieResponse.stats[1].base_stat},
+                        {name: 'Defensa', value: pokemonVarietieResponse.stats[2].base_stat},
+                        {name: 'Atq Sp.', value: pokemonVarietieResponse.stats[3].base_stat},
+                        {name: 'Dfn Sp.', value: pokemonVarietieResponse.stats[4].base_stat},
+                        {name: 'Agilidad', value: pokemonVarietieResponse.stats[5].base_stat}
                         ]
                     }
                 } else { //Si no tiene tipo secundario
@@ -130,12 +131,12 @@ export default {
                     pokemonVarietieWeight: pokemonVarietieResponse.weight,
                     pokemonVarietieHeight: pokemonVarietieResponse.height,
                     pokemonVarietieStats: [
-                        {name: 'HP', value: pokemonVarietieResponse.stats[0].base_stat},
-                        {name: 'Attack', value: pokemonVarietieResponse.stats[1].base_stat},
-                        {name: 'Defense', value: pokemonVarietieResponse.stats[2].base_stat},
-                        {name: 'SpecialAtk', value: pokemonVarietieResponse.stats[3].base_stat},
-                        {name: 'SpecialDfn', value: pokemonVarietieResponse.stats[4].base_stat},
-                        {name: 'Agility', value: pokemonVarietieResponse.stats[5].base_stat}
+                        {name: 'PS', value: pokemonVarietieResponse.stats[0].base_stat},
+                        {name: 'Ataque', value: pokemonVarietieResponse.stats[1].base_stat},
+                        {name: 'Defensa', value: pokemonVarietieResponse.stats[2].base_stat},
+                        {name: 'Atq Sp.', value: pokemonVarietieResponse.stats[3].base_stat},
+                        {name: 'Dfn Sp.', value: pokemonVarietieResponse.stats[4].base_stat},
+                        {name: 'Agilidad', value: pokemonVarietieResponse.stats[5].base_stat}
                         ]
                     }
                 }
@@ -149,7 +150,7 @@ export default {
                 }                
                 
             }
-            console.log(this.pokemonSpecieData)
+            //console.log(this.pokemonSpecieData)
         },
         setPokedexInfo(pokedexEntries){
 

@@ -31,9 +31,13 @@ export default {
       AppBar,
       Navigation
   },
+  data: () => {
+        return{
+        }
+    },  
   computed:{
     styleBackground(){
-      return this.$route.name=='PokemonInfo' ? 'normal' : 'white';
+      return this.$route.name=='PokemonInfo' ? this.$store.getters.getMainBackground : 'white';
     }
   },
   methods:{
