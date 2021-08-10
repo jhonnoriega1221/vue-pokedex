@@ -31,12 +31,12 @@
   </defs>
   <g style="">
     <title>background</title>
-    <path style="paint-order: fill; fill: url(#gradient-3-0);" d="M 602 512 H 934 A 90 90 0 0 1 1024 602 V 768 H 512 V 602 A 90 90 0 0 1 602 512 Z" bx:shape="rect 512 512 512 256 90 90 0 0 1@1ef6c1b3">
+    <rect style="paint-order: fill; fill: url(#gradient-3-0);" x="512" y="512" width="512" height="256" rx="0" ry="0">
       <title>up_rectangle</title>
-    </path>
-    <path style="fill: url(#gradient-1-1);" d="M 512 768 H 1024 V 934 A 90 90 0 0 1 934 1024 H 602 A 90 90 0 0 1 512 934 V 768 Z" bx:shape="rect 512 768 512 256 0 0 90 90 1@169abbde">
+    </rect>
+    <rect style="fill: url(#gradient-1-1);" x="512" y="768" width="512" height="256" rx="0" ry="0">
       <title>down_rectangle</title>
-    </path>
+    </rect>
   </g>
   <line style="stroke: rgb(0, 0, 0); stroke-width: 36px;" x1="512" y1="768" x2="1024" y2="768"/>
   <circle style="fill-rule: nonzero; stroke: url(#gradient-0-0); stroke-linecap: square; stroke-miterlimit: 1; stroke-dashoffset: 5px; paint-order: markers stroke; fill: url(#gradient-2-1); stroke-width: 63px;" cx="768" cy="768" r="81.453"/>

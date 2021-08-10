@@ -56,7 +56,7 @@
                                     <v-row v-if="pokemonData.pokemonEggGroup">
 
                                         <v-col class="grey--text py-0" cols=5>
-                                            <p>Grupos Huevo</p>
+                                            <p>Grupo Huevo</p>
                                         </v-col>
                                         <v-col class="black--text py-0" cols=7>
                                             <p class="text-capitalize">{{pokemonData.pokemonEggGroup}}</p>
@@ -75,7 +75,7 @@
                 <v-tab-item class="pb-10" v-if="pokemonData.pokemonVarieties[selectedForm]">
                     <v-card flat>
                         <v-card-text >
-                            <h3 class="black--text pb-7">Estadisticas Base</h3>
+                            <h3 class="black--text pb-7">Estadisticas base</h3>
                             <!--Info-->
                             <v-row v-for="pokemonStat in pokemonData.pokemonVarieties[selectedForm].pokemonVarietieStats" v-bind:key=pokemonStat.id>
                                 <v-col cols=3 class=pb-0>

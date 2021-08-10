@@ -2,22 +2,30 @@
     <div class="pokedex" >
         <div class="d-flex">
             <!--Pokedex title-->
-            <div>
-                <h1 class="pb-7 pr-3">Pokédex</h1>
+            <div class="pb-4">
+                <div class="d-flex">
+                <h1 class="pr-3 pb-2">Pokédex</h1>
+                <v-btn
+                text
+                color="accent"
+                class="mt-2"
+                :hidden="this.$vuetify.breakpoint.mobile"
+                @click="showFilterDialog()"
+                >
+                    <v-icon left>filter_alt</v-icon>
+                Filtrar
+                </v-btn>
+                </div>
+                <div v-if="$route.query.type !== undefined && $route.query.type !== 'all' || $route.query.pokedex !== undefined && $route.query.pokedex !== 'national'">
+                    <h4 class="mb-2">Filtros: </h4> 
+                    <v-chip class="mr-1" v-if="$route.query.type !== undefined && $route.query.type !== 'all'" @click:close="removeFilter('type')" >{{$route.query.type}}</v-chip>
+                    <v-chip v-if="$route.query.pokedex !== undefined && $route.query.pokedex !== 'national'" @click:close="removeFilter('pokedex')" >{{$route.query.pokedex}}</v-chip>
+                </div>
             </div>
 
             <!--Filter button (Desktop)-->
 
-            <v-btn
-            text
-            color="accent"
-            class="mt-2"
-            :hidden="this.$vuetify.breakpoint.mobile"
-            @click="showFilterDialog()"
-            >
-                <v-icon left>filter_alt</v-icon>
-            Filtrar
-            </v-btn>
+            
         </div>
 
         <!--Filter FAB button (Mobile)-->
@@ -107,6 +115,7 @@ export default {
 
     },
     async mounted() {
+        window.scrollTo(0, 0)
         this.setPagination(); //Metodo que determina la paginación de acuerdo la query en el router
         this.getPokemonList(); //METODO QUE ME OBTIENE LOS POKIMONS (NUEVO)
     },
@@ -257,8 +266,6 @@ export default {
                         type:this.$route.query.type,
                         region:this.$route.query.region,
                         pokedex:this.$route.query.pokedex,
-                        groupby:this.$route.query.groupby,
-                        order:this.$route.query.order,
                         page:parseInt(page)
                 }
             })
@@ -270,23 +277,19 @@ export default {
                     type:this.$route.query.type,
                     region:this.$route.query.region,
                     pokedex:this.$route.query.pokedex,
-                    groupby:this.$route.query.groupby,
-                    order:this.$route.query.order,
                     page:this.$route.query.page
                 },
                 hash:'filter'
             })
         },
 
-        async applyFilter(selectedType, selectedRegion, selectedPokedex, selectedOrder, selectedGroupBy){
+        async applyFilter(selectedType, selectedRegion, selectedPokedex){
             this.$router.push({hash:'',
                 query:{
                     type:selectedType,
                     region:selectedRegion,
                     pokedex:selectedPokedex,
-                    groupby:selectedGroupBy,
-                    order:selectedOrder,
-                    page:1
+                    page:undefined
                 }
             });
             window.scrollTo(0,0);
@@ -294,6 +297,37 @@ export default {
             this.pokemons = [];
             await this.getPokemonList();
 
+        },
+
+        removeFilter(removeItem){
+            console.log(removeItem)
+            if(removeItem === 'type'){
+                this.$router.push({
+                query:{
+                    type:undefined,
+                    region:this.$route.query.region,
+                    pokedex:this.$route.query.pokedex,
+                    page:undefined
+                }
+                });
+            }
+
+            if(removeItem === 'pokedex'){
+                console.log('a')
+                this.$router.push({
+                query:{
+                    type:this.$route.query.type,
+                    region:undefined,
+                    pokedex:undefined,
+                    page:undefined
+                }
+                });
+                
+            }
+
+            window.scrollTo(0,0);
+                this.setPagination();
+                this.pokemons = [];
         }
     }
 }

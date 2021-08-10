@@ -7,14 +7,14 @@
 	>
 		<v-card>
 			<v-card-title>
-				Filtrar y ordenar
+				Filtrar
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text>
 				<v-container>
-					<v-row>
+					<!--<v-row>
 
-						<!--Agrupar por-->
+						<p>Agrupar por</p>
 						<v-col
 						cols="12"
 						md="6"
@@ -34,7 +34,7 @@
 		                  	</v-select>
 						</v-col>
 
-						<!--Orden de agrupación-->
+						<p>Orden de agrupación</p>
 						<v-col
 						cols="12"
 						md="6"
@@ -57,7 +57,7 @@
 						</v-col>
 
 					</v-row>
-
+-->
 					<v-row>
 						<v-divider class="mb-6"></v-divider>
 					</v-row>
@@ -250,15 +250,6 @@ export default {
 			else
 				this.selectedPokedex = this.$route.query.pokedex
 
-			if(this.$route.query.groupby === undefined)
-				this.selectedGroupBy = 'number'
-			else
-				this.selectedGroupBy = this.$route.query.groupby
-
-			if(this.$route.query.order === undefined)
-				this.selectedOrder = 'asc'
-			else
-				this.selectedOrder = this.$route.query.order
 		},
 
 		closeDialog(){

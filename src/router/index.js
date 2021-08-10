@@ -26,6 +26,20 @@ const routes = [
     path: '/pokemon/:pokemon_name',
     name: 'PokemonInfo',
     component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/PokemonInfo.vue')
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/404.vue')
+  },
+  {
+    path: '/notyet',
+    name: 'NotYet',
+    component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/NotYet.vue')
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 

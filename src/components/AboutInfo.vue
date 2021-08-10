@@ -3,13 +3,15 @@
 	v-model="showDialog"
 	width="500"
 	v-on:click:outside="closeDialog"
+	scrollable
 	>
 		<v-card>
 			<v-card-title class="">
 				Acerca de Pokédex
 			</v-card-title>
+			<v-divider></v-divider>
 			<div class="d-flex">
-				<v-img transition=none src="../assets/logo.png" width="10" class="ma-8"></v-img>
+				<v-img transition=none src="../assets/logo.png" width="10" class="ma-1"></v-img>
 				<v-img transition=none src="../assets/logo2.png" width="60" class="ma-1"></v-img>
 			</div>
 			<v-card-text class="text-center">Creado con <a href="https://vuejs.org/" target="_blank">Vue</a> y <a href="https://vuetifyjs.com/en/" target="_blank">Vuetify</a></v-card-text>
