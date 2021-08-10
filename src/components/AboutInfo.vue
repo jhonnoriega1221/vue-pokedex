@@ -6,28 +6,36 @@
 	scrollable
 	>
 		<v-card>
-			<v-card-title class="">
+			<v-card-title>
 				Acerca de Pokédex
 			</v-card-title>
 			<v-divider></v-divider>
-			<div class="d-flex">
-				<v-img transition=none src="../assets/logo.png" width="10" class="ma-1"></v-img>
-				<v-img transition=none src="../assets/logo2.png" width="60" class="ma-1"></v-img>
-			</div>
-			<v-card-text class="text-center">Creado con <a href="https://vuejs.org/" target="_blank">Vue</a> y <a href="https://vuetifyjs.com/en/" target="_blank">Vuetify</a></v-card-text>
-
-			<v-img transition=none src="../assets/person.png" width="50" class="ma-auto"></v-img>
-
 			<v-card-text class="text-center">
-				Creado por
-				Jhon Noriega <br>
-				<a href="https://github.com/jhonnoriega1221/vue-pokedex" target="_blank">GitHub</a>
-				<br>
-			</v-card-text>
-			<v-card-text class="text-right">
-				v0.2 | 2021
-			</v-card-text>
+				<p class="text-subtitle-2 mt-4">Tecnologías usadas: </p>
 
+				<v-img class="d-inline-block " transition=none src="../assets/logo.png" width="40" ></v-img>
+				<a href="https://vuejs.org/" target="_blank" class="d-inline-block mr-6">Vue</a>
+				
+				<v-img class="d-inline-block " transition=none src="../assets/logo2.png" width="40" ></v-img>
+				<a href="https://vuetifyjs.com/" target="_blank" class="d-inline-block mr-4">Vuetify</a>
+				
+
+				<v-img class="d-inline-block mr-2" transition=none src="../assets/logo3.png" width="80" ></v-img>
+				<a href="https://pokeapi.co/" target="_blank" class="d-inline-block">PokéAPI</a>
+				
+				<br>
+				<v-img transition=none src="../assets/person.png" width="50" class="ma-auto mt-10"></v-img>
+
+				<p class="text-center text-subtitle-2">
+					Creado por
+					Jhon Noriega <br>
+					<a href="https://github.com/jhonnoriega1221/vue-pokedex" target="_blank">GitHub</a>
+					<br>
+				</p>
+				<p class="text-right">
+					v0.3 | 2021
+				</p>
+			</v-card-text>
 			<v-divider></v-divider>
 
 			<v-card-actions>
