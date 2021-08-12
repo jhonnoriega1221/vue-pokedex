@@ -18,7 +18,7 @@
                                 <v-col cols="12" lg="5">
 
                                     <!--Tarjeta que muestra tamaño y peso-->
-                                    <v-card   elevation="5" class="pa-4">
+                                    <v-card  rounded="xl" elevation="5" class="pa-4">
                                         <v-row class="mb-m1 grey--text">
                                             <v-col cols=6>Altura</v-col>
                                             <v-col cols=6>Peso</v-col>

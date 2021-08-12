@@ -2,7 +2,7 @@
     <div class="pokecard" v-if="pokemonCardData">
         <v-card
         class="pa-3"
-        style="border-radius: 20px"
+        rounded="xl"
         :color = "pokemonCardData.pokemonTypePrimary"
         flat
         ripple
