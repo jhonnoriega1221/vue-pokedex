@@ -28,7 +28,11 @@
                             <v-list-item-title>Pokédex</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-
+                    <v-list-item
+                    disabled
+                    >
+                        <v-divider></v-divider>
+                    </v-list-item>
                     <v-list-item class="mb-auto" :to="{ name:'Settings'}">
                         <v-list-item-icon>
                             <v-icon>settings</v-icon>

@@ -149,11 +149,11 @@ export default {
     return {
       buttons: [
         {name: 'Pokedex', route: 'Pokedex', color: '#4fc1a6'},
-        {name: 'Movimientos', route: 'NotYet', color: '#f7786b'},
-        {name: 'Objetos', route: 'NotYet', color: '#ffce4b'},
-        {name: 'Lugares', route: 'NotYet', color: '#58aaf6'},
-        {name: 'Tipos', route: 'NotYet', color: '#7c538c  '},
-        {name: 'Group Builder', route: 'NotYet', color: '#b1736c'}
+        {name: 'Movimientos', route: 'NotFound', color: '#f7786b'},
+        {name: 'Objetos', route: 'NotFound', color: '#ffce4b'},
+        {name: 'Lugares', route: 'NotFound', color: '#58aaf6'},
+        {name: 'Tipos', route: 'NotFound', color: '#7c538c  '},
+        {name: 'Group Builder', route: 'NotFound', color: '#b1736c'}
       ],
       pokeNews: [
         {title: 'Todo lo que sabemos del personaje adicional que llegaría a Pokémon Unite tras los tres primeros', imageUrl: 'https://picsum.photos/500/300', date:'10 May 2020', link:''},

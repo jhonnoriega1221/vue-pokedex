@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<h1>Ajustes</h1>
+		<v-row>
+			<div class="d-flex mt-2 ml-2	 mt-3">
+                <v-btn v-on:click="back" v-if="$vuetify.breakpoint.mobile" class="mr-0 mt-1" icon><v-icon>arrow_back</v-icon></v-btn>
+                <h1 class="ml-1">Ajustes</h1>
+            </div>
+        </v-row>
 		<v-list
 		color="background"
 		>
@@ -66,6 +71,9 @@ export default {
     			localStorage.setItem('dark', false);
     		}
 
+    	},
+    	back(){
+    		this.$router.back();
     	}
     }
 }

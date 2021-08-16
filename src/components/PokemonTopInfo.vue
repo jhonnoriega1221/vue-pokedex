@@ -5,7 +5,11 @@
 
         <!--Pokemon name and number-->
         <v-row>
-            <v-col cols=6 class="pb-0">
+            <v-col cols="1" class="pb-0 mt-1 pl-2">
+                <v-btn v-on:click="back" class="white--text" icon><v-icon>arrow_back</v-icon></v-btn>
+                
+            </v-col>
+            <v-col cols=5 class="pb-0">
                 <h1 class="text-capitalize white--text">{{pokemonData.pokemonSpecieName}}</h1>
             </v-col>
             <v-col cols=6 class="pb-0">
@@ -14,7 +18,7 @@
         </v-row>
         
         <!--Pokemon types and genera-->
-        <v-row >
+        <v-row>
             <!--v-chip v-for="(type) in pokemonData.types" v-bind:key="type.id" dark style="height:25px"  class="mr-2 text-center text-capitalize" color="rgba(255, 255, 255, 0.3)">{{type.type.name}}</v-chip-->
             <v-col v-if="pokemonData.pokemonVarieties[selectedForm]" class="py-0" cols=7>
                 <v-chip dark style="height:25px"  class="text-center text-capitalize mr-1" color="rgba(255, 255, 255, 0.3)">{{pokemonData.pokemonVarieties[selectedForm].pokemonVarietieFirstType}}</v-chip>
@@ -90,6 +94,11 @@ export default {
     data: () => {
         return{
             selectedForm:0
+        }
+    },
+    methods: {
+        back(){
+            this.$router.back();
         }
     }
 }
