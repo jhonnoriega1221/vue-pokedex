@@ -10,7 +10,7 @@
                 <v-tab-item class="pb-10" v-if="pokemonData.pokemonVarieties[selectedForm]">
                     <v-card flat>
                         <v-card-text>
-                            <p class="black--text">
+                            <p>
                                 {{pokemonData.pokedexEntry}}
                             </p>
                             <v-row>
@@ -34,18 +34,18 @@
                                 <v-col cols="12" lg="7">
 
                                     <!--Información de crianza-->
-                                    <h3 class="black--text pb-7">Crianza</h3>
+                                    <h3 class="font-weight-black pb-7">Crianza</h3>
                                     <v-row>
 
                                         <v-col class="grey--text py-0" cols=5>
                                             <p>Genero</p>
                                         </v-col>
-                                        <v-col class="black--text py-0" cols=3>
+                                        <v-col class="py-0" cols=3>
                                             <p class="pink--text d-inline font-weight-bold">F</p>
                                             <p class="d-inline" v-if="pokemonData.pokemonGenderRate > -1"> {{(pokemonData.pokemonGenderRate / 8) * 100}}%</p>
                                             <p class="d-inline" v-else> 0%</p>
                                         </v-col>
-                                        <v-col class="black--text py-0" cols=4>
+                                        <v-col class="py-0" cols=4>
                                             <p class="blue--text d-inline font-weight-bold">M</p>
                                             <p class="d-inline" v-if="pokemonData.pokemonGenderRate > -1"> {{100-((pokemonData.pokemonGenderRate / 8) * 100)}}%</p>
                                             <p class="d-inline" v-else> 0%</p>
@@ -58,7 +58,7 @@
                                         <v-col class="grey--text py-0" cols=5>
                                             <p>Grupo Huevo</p>
                                         </v-col>
-                                        <v-col class="black--text py-0" cols=7>
+                                        <v-col class="py-0" cols=7>
                                             <p class="text-capitalize">{{pokemonData.pokemonEggGroup}}</p>
                                         </v-col>
 
@@ -75,13 +75,13 @@
                 <v-tab-item class="pb-10" v-if="pokemonData.pokemonVarieties[selectedForm]">
                     <v-card flat>
                         <v-card-text >
-                            <h3 class="black--text pb-7">Estadisticas base</h3>
+                            <h3 class="font-weight-black pb-7">Estadisticas base</h3>
                             <!--Info-->
                             <v-row v-for="pokemonStat in pokemonData.pokemonVarieties[selectedForm].pokemonVarietieStats" v-bind:key=pokemonStat.id>
                                 <v-col cols=3 class=pb-0>
                                     {{pokemonStat.name}}
                                 </v-col>
-                                <v-col cols=2 class="black--text pb-0">
+                                <v-col cols=2 class="font-weight-bold pb-0">
                                     {{pokemonStat.value}}
                                 </v-col>
                                 <v-col cols=7 class="pt-5 pb-0">
@@ -98,7 +98,7 @@
                 <v-tab-item class="pb-10">
                     <v-card flat>
                         <v-card-text v-if="pokemonData.evolutionChain.evolvesTo.length > 0">
-                            <h3 class="black--text pb-7">Cadena evolutiva</h3>
+                            <h3 class="font-weight-black pb-7">Cadena evolutiva</h3>
 
                             <!--Fila de la primera evolución (Primer evolve to)-->
                             <v-row>
@@ -183,7 +183,7 @@
         </v-card>
     </div>
     <div v-else>
-        <v-skeleton-loader class="mt-0 mt-md-5" height="260" type ="image@2" style="background:white">
+        <v-skeleton-loader class="mt-0 mt-md-5" height="260" type ="image@2" style="background:gray">
                     </v-skeleton-loader>
     </div>
 </template>

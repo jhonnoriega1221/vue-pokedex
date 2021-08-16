@@ -7,7 +7,7 @@
         >
             <v-list shaped dense>
                 <v-list-item-group
-                color="accent"
+                color="primary"
                 >
                     <!--Home-->
                     <v-list-item to="/">
@@ -28,6 +28,15 @@
                             <v-list-item-title>Pokédex</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
+                    <v-list-item class="mb-auto" :to="{ name:'Settings'}">
+                        <v-list-item-icon>
+                            <v-icon>settings</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>Ajustes</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>                    
 
                     <!--Favoritos-->
                     <!--v-list-item to="/lorem">

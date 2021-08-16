@@ -1,11 +1,9 @@
 <template>
   <div>
     <v-app-bar 
-    
+      color="appbar"
       app 
       clipped-left 
-      :color = "$route.hash==='#search' && this.$vuetify.breakpoint.mobile ? 'white' : 'primary'"
-      dark
       
     >
       <!--Div del titulo y logo-->
@@ -36,11 +34,11 @@
         v-if="!$vuetify.breakpoint.mobile || $route.hash==='#search'"
         :autofocus="$vuetify.breakpoint.mobile"
         flat
-        light
         dense
-        label="Buscar" 
+        background-color="background"
         class="mt-6"
-        solo
+        outlined
+        placeholder="Buscar"
         clearable
         v-model="searchSelect"
         :search-input.sync="dataSearch"
@@ -191,7 +189,13 @@
             >
               <v-list-item-title>Opciones</v-list-item-title>
             </v-list-item-->
-
+            <v-list-item 
+            link 
+            dense
+            :to="{name: 'Settings'}"
+            >
+              <v-list-item-title>Ajustes</v-list-item-title>
+            </v-list-item>
             <v-list-item 
             link 
             dense

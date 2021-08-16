@@ -34,10 +34,20 @@ export default {
   data: () => {
         return{
         }
-    },  
+    },
+  mounted(){
+    const theme = localStorage.getItem('dark')
+    if(theme) {
+      if(theme == 'true') {
+        this.$vuetify.theme.dark = true
+      } else {
+        this.$vuetify.theme.dark = false
+      }
+    }
+  },
   computed:{
     styleBackground(){
-      return this.$route.name=='PokemonInfo' ? this.$store.getters.getMainBackground : 'white';
+      return this.$route.name=='PokemonInfo' ? this.$store.getters.getMainBackground : 'background';
     }
   },
   methods:{
@@ -50,6 +60,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 
 </style>

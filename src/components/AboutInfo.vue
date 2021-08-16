@@ -41,7 +41,7 @@
 			<v-card-actions>
 				<v-spacer></v-spacer>
 				<v-btn
-					color="primary"
+					color="accent"
 					text
 					v-on:click="closeDialog"
 				>

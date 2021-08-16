@@ -28,6 +28,11 @@ const routes = [
     component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/PokemonInfo.vue')
   },
   {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/Settings.vue')
+  },
+  {
     path: '/404',
     name: 'NotFound',
     component: () => import (/* webpackChunkName: "pokemon-info" */ '../views/404.vue')
